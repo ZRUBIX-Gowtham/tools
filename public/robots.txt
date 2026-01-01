@@ -1,0 +1,16 @@
+# Robots.txt for Gowtham Tools
+# https://toolshub.onslate.com
+
+# Allow all web crawlers
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://toolshub.onslate.com/sitemap.xml
+
+# Disallow admin or private paths (if any)
+# Disallow: /api/
+# Disallow: /admin/
+
+# Crawl-delay (optional - helps reduce server load)
+# Crawl-delay: 10
