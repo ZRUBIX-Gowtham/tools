@@ -1,8 +1,8 @@
 import ImageConverter from '@/components/ImageConverter';
 
 export const metadata = {
-    title: "SVG to PNG Converter | ToolsHub",
-    description: "Convert SVG vector graphics to PNG raster images. High-resolution output on ToolsHub.",
+    title: "Free SVG to PNG Converter | ToolsHub",
+    description: "Convert SVG vector graphics to PNG raster images. Free, high-resolution output.",
 };
 
 export default function SvgToPng() {
@@ -11,7 +11,7 @@ export default function SvgToPng() {
             fromFormat="SVG"
             toFormat="PNG"
             title="SVG to PNG Converter"
-            description="Need a raster version of your vector art? Convert SVG to high-resolution PNG for social media, presentations, or general use."
+            description="Convert your SVG vectors to high-resolution PNG images. Perfect for social media, presentations, or general use."
         />
     );
 }

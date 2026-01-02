@@ -61,7 +61,10 @@ export default function Header() {
 
     const moreTools = [
         { name: 'GIF to MP4', href: '/convert/gif-to-mp4' },
-        { name: 'Image Resizer', href: '/tools/resizer' }
+        { name: 'Image Resizer', href: '/tools/resizer' },
+        { name: 'PDF Compressor', href: '/tools/pdf-compressor' },
+        { name: 'Color Picker', href: '/tools/color-picker' },
+        { name: 'QR Generator', href: '/tools/qr-generator' }
     ];
 
     return (

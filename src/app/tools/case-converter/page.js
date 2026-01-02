@@ -1,0 +1,75 @@
+"use client";
+import { useState } from 'react';
+import { Type, Copy, Check, ArrowDown } from 'lucide-react';
+
+export default function CaseConverter() {
+    const [text, setText] = useState('');
+    const [copied, setCopied] = useState(false);
+
+    const conversions = [
+        { label: 'lowercase', fn: (t) => t.toLowerCase() },
+        { label: 'UPPERCASE', fn: (t) => t.toUpperCase() },
+        { label: 'Title Case', fn: (t) => t.toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) },
+        { label: 'Sentence case', fn: (t) => t.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, c => c.toUpperCase()) },
+        { label: 'aLtErNaTiNg', fn: (t) => t.split('').map((c, i) => i % 2 ? c.toUpperCase() : c.toLowerCase()).join('') },
+        { label: 'InVeRsE', fn: (t) => t.split('').map(c => c === c.toUpperCase() ? c.toLowerCase() : c.toUpperCase()).join('') },
+    ];
+
+    const applyConversion = (fn) => {
+        setText(fn(text));
+    };
+
+    const copyText = () => {
+        navigator.clipboard.writeText(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    return (
+        <div className="max-w-4xl mx-auto px-4 py-20">
+            <div className="text-center mb-12">
+                <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">Case Converter</h1>
+                <p className="text-black text-lg">Convert text between different case styles.</p>
+            </div>
+
+            <div className="bg-white rounded-[2rem] border border-slate-200 p-8 md:p-12 shadow-xl">
+                <textarea
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                    placeholder="Enter your text here..."
+                    className="w-full h-48 p-6 rounded-xl bg-slate-50 border-2 border-transparent focus:border-teal-500 outline-none resize-none text-black placeholder:text-slate-400 mb-6"
+                />
+
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
+                    {conversions.map((conv) => (
+                        <button
+                            key={conv.label}
+                            onClick={() => applyConversion(conv.fn)}
+                            className="py-3 px-4 bg-slate-100 hover:bg-teal-100 hover:text-teal-700 rounded-xl font-bold text-sm transition-all text-black cursor-pointer"
+                        >
+                            {conv.label}
+                        </button>
+                    ))}
+                </div>
+
+                <div className="flex justify-between">
+                    <button
+                        onClick={() => setText('')}
+                        className="text-black hover:text-rose-500 font-bold text-sm transition-colors cursor-pointer"
+                    >
+                        Clear
+                    </button>
+                    {text && (
+                        <button
+                            onClick={copyText}
+                            className="bg-teal-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-teal-700 transition-all flex items-center gap-2 cursor-pointer"
+                        >
+                            {copied ? <Check size={18} /> : <Copy size={18} />}
+                            {copied ? 'Copied!' : 'Copy'}
+                        </button>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}

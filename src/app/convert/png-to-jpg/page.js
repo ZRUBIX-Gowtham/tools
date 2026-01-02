@@ -1,7 +1,7 @@
 import ImageConverter from '@/components/ImageConverter';
 
 export const metadata = {
-    title: "PNG to JPG Converter | ToolsHub",
+    title: "Free PNG to JPG Converter | ToolsHub",
     description: "Convert PNG images to JPG format for free with ToolsHub. High quality results, secure processing.",
 };
 

@@ -1,8 +1,8 @@
 import ImageConverter from '@/components/ImageConverter';
 
 export const metadata = {
-    title: "JPG to PNG Converter | ToolsHub",
-    description: "Convert JPG photos to PNG format for free. Support for high quality conversion on ToolsHub.",
+    title: "Free JPG to PNG Converter | ToolsHub",
+    description: "Convert JPG photos to PNG format. Free, high quality conversion.",
 };
 
 export default function JpgToPng() {
@@ -11,7 +11,7 @@ export default function JpgToPng() {
             fromFormat="JPG"
             toFormat="PNG"
             title="JPG to PNG Converter"
-            description="Convert your JPG photos to PNG format effortlessly. Perfect for when you need a lossless format for further editing or web use."
+            description="Convert your JPG photos to PNG format. Perfect for when you need a lossless format for further editing or web use."
         />
     );
 }

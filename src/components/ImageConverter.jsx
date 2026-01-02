@@ -6,6 +6,17 @@ import confetti from 'canvas-confetti';
 
 import jsPDF from 'jspdf';
 import JSZip from 'jszip';
+// Dynamic import for pdfjs-dist to avoid SSR issues
+
+
+// Helper to load PDF.js dynamically
+const loadPdfJs = async () => {
+    const pdfjsLib = await import('pdfjs-dist');
+    if (typeof window !== 'undefined' && !pdfjsLib.GlobalWorkerOptions.workerSrc) {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+    }
+    return pdfjsLib;
+};
 
 export default function ImageConverter({ fromFormat, toFormat, title, description }) {
     const [files, setFiles] = useState([]); // Changed to array
@@ -21,7 +32,8 @@ export default function ImageConverter({ fromFormat, toFormat, title, descriptio
         'JPEG': ['image/jpeg', 'image/jpg'],
         'WEBP': ['image/webp'],
         'SVG': ['image/svg+xml'],
-        'GIF': ['image/gif']
+        'GIF': ['image/gif'],
+        'PDF': ['application/pdf']
     };
 
     const handleFiles = (selectedFiles) => {
@@ -35,7 +47,7 @@ export default function ImageConverter({ fromFormat, toFormat, title, descriptio
             const invalidFiles = newFiles.filter(f => allowed && !allowed.includes(f.type));
 
             if (invalidFiles.length > 0) {
-                setError(`Some files are not ${fromFormat} format and were skipped.`);
+                setError(`Please upload only ${fromFormat} files. Invalid files were skipped.`);
                 // Filter valid only
                 const validFiles = newFiles.filter(f => allowed && allowed.includes(f.type));
                 if (validFiles.length === 0) {
@@ -52,7 +64,6 @@ export default function ImageConverter({ fromFormat, toFormat, title, descriptio
 
         setStatus('idle');
         setError(null);
-        // setConvertedUrl(null); // No longer single URL
     };
 
     const onFileChange = (e) => handleFiles(e.target.files);
@@ -67,6 +78,42 @@ export default function ImageConverter({ fromFormat, toFormat, title, descriptio
         if (files.length <= 1) setStatus('idle'); // Reset if cleared
     };
 
+    // Convert PDF to images
+    const convertPdfToImages = async (file, targetFormat) => {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdfLib = await loadPdfJs();
+        const pdf = await pdfLib.getDocument({ data: arrayBuffer }).promise;
+        const results = [];
+
+        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+            const page = await pdf.getPage(pageNum);
+            const scale = 2; // Higher quality
+            const viewport = page.getViewport({ scale });
+
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            await page.render({ canvasContext: context, viewport }).promise;
+
+            let url;
+            if (targetFormat.toLowerCase() === 'png') {
+                url = canvas.toDataURL('image/png');
+            } else {
+                url = canvas.toDataURL('image/jpeg', 0.92);
+            }
+
+            results.push({
+                originalName: `${file.name}-page-${pageNum}`,
+                url: url,
+                format: targetFormat.toLowerCase()
+            });
+        }
+
+        return results;
+    };
+
     const convertImages = async () => {
         if (files.length === 0) return;
         setStatus('processing');
@@ -79,14 +126,19 @@ export default function ImageConverter({ fromFormat, toFormat, title, descriptio
             const newConvertedFiles = [];
 
             for (const file of files) {
-                // Simulate progress for batch
-                // Conversion Logic
-                const resultUrl = await processFile(file, toFormat);
-                newConvertedFiles.push({
-                    originalName: file.name,
-                    url: resultUrl,
-                    format: toFormat.toLowerCase()
-                });
+                // Check if it's a PDF conversion
+                if (fromFormat.toUpperCase() === 'PDF') {
+                    const pdfResults = await convertPdfToImages(file, toFormat);
+                    newConvertedFiles.push(...pdfResults);
+                } else {
+                    // Regular image conversion
+                    const resultUrl = await processFile(file, toFormat);
+                    newConvertedFiles.push({
+                        originalName: file.name,
+                        url: resultUrl,
+                        format: toFormat.toLowerCase()
+                    });
+                }
 
                 processedCount++;
                 setProgress((processedCount / totalFiles) * 100);
@@ -102,7 +154,7 @@ export default function ImageConverter({ fromFormat, toFormat, title, descriptio
 
         } catch (err) {
             console.error(err);
-            setError("An error occurred during conversion.");
+            setError("An error occurred during conversion. Please make sure you've uploaded valid files.");
             setStatus('error');
         }
     };
@@ -181,6 +233,13 @@ export default function ImageConverter({ fromFormat, toFormat, title, descriptio
         setError(null);
     };
 
+    // Get accepted file types for input
+    const getAcceptedTypes = () => {
+        if (fromFormat === 'ANY') return 'image/*';
+        if (fromFormat.toUpperCase() === 'PDF') return '.pdf,application/pdf';
+        return allowedTypes[fromFormat.toUpperCase()]?.join(',') || 'image/*';
+    };
+
     return (
         <div className="max-w-4xl mx-auto px-4 py-20 relative z-10">
             <div className="text-center mb-12">
@@ -226,6 +285,9 @@ export default function ImageConverter({ fromFormat, toFormat, title, descriptio
                                     Choose {fromFormat === 'ANY' ? 'Files' : fromFormat} Files
                                 </button>
                                 <p className="text-slate-500 text-sm">or drag and drop multiple files here</p>
+                                {fromFormat.toUpperCase() === 'PDF' && (
+                                    <p className="text-amber-400 text-xs mt-2">Only PDF files are accepted</p>
+                                )}
                             </div>
                         </motion.div>
                     )}
@@ -362,7 +424,7 @@ export default function ImageConverter({ fromFormat, toFormat, title, descriptio
                     onChange={onFileChange}
                     className="hidden"
                     multiple // Enable multiple selection
-                    accept={fromFormat === 'ANY' ? 'image/*' : allowedTypes[fromFormat.toUpperCase()]?.join(',')}
+                    accept={getAcceptedTypes()}
                 />
             </div>
 

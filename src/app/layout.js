@@ -9,13 +9,16 @@ const ubuntu = Ubuntu({
 });
 
 export const metadata = {
-  title: "ToolsHub | Professional File Conversion Platform",
-  description: "Advanced online image converters. PNG to JPG, WebP to PNG, SVG to JPG and more. Fast, secure and studio-quality results.",
+  title: "Free ToolsHub | Professional File Conversion Platform",
+  description: "Online image converters. PNG to JPG, WebP to PNG, SVG to JPG and more. Fast, secure and studio-quality results.",
+  verification: {
+    google: "ekF41RRcAPx_GVF-ocm_CnCLnC36RxqC2TUtcr-E-Cw",
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={ubuntu.className}>
         <div className="flex flex-col min-h-screen">
           <Header />

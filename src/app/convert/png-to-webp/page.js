@@ -1,7 +1,7 @@
 import ImageConverter from '@/components/ImageConverter';
 
 export const metadata = {
-    title: "PNG to WebP Converter | ToolsHub",
+    title: "Free PNG to WebP Converter | ToolsHub",
     description: "Convert PNG to the modern WebP format for better web performance. Free tool by ToolsHub.",
 };
 

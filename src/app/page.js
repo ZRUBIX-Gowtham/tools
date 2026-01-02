@@ -10,7 +10,13 @@ import {
   ArrowRight,
   Sparkles,
   Layers,
-  Image as ImageIcon
+  Image as ImageIcon,
+  FileText,
+  Crop,
+  Palette,
+  Type,
+  QrCode,
+  FileCode
 } from 'lucide-react';
 
 const converterGroups = [
@@ -22,7 +28,8 @@ const converterGroups = [
       { name: "PNG to JPG", href: "/convert/png-to-jpg", description: "Convert transparent PNG to high-quality JPG" },
       { name: "PNG to WebP", href: "/convert/png-to-webp", description: "Modern, compressed image format for web" },
       { name: "PNG to SVG", href: "/convert/png-to-svg", description: "Raster to vector conversion tool" },
-      { name: "PNG to PDF", href: "/convert/png-to-pdf", description: "Save PNG image as a PDF document" }
+      { name: "PNG to PDF", href: "/convert/png-to-pdf", description: "Save PNG image as a PDF document" },
+      { name: "PNG to ICO", href: "/convert/png-to-ico", description: "Create favicon/icons from PNG images", isNew: true }
     ]
   },
   {
@@ -41,7 +48,8 @@ const converterGroups = [
     gradient: "from-emerald-500/20 to-emerald-500/5",
     tools: [
       { name: "JPG to PNG", href: "/convert/jpg-to-png", description: "Convert JPG to transparent PNG format" },
-      { name: "JPG to WebP", href: "/convert/jpg-to-webp", description: "Best conversion for web photos" }
+      { name: "JPG to WebP", href: "/convert/jpg-to-webp", description: "Best conversion for web photos" },
+      { name: "JPG to PDF", href: "/convert/jpg-to-pdf", description: "Convert JPG images to PDF documents", isNew: true }
     ]
   },
   {
@@ -51,6 +59,7 @@ const converterGroups = [
     tools: [
       { name: "SVG to PNG", href: "/convert/svg-to-png", description: "Vector to high-res raster image" },
       { name: "SVG to JPG", href: "/convert/svg-to-jpg", description: "Vector illustration to photo format" },
+      { name: "SVG to PDF", href: "/convert/svg-to-pdf", description: "Convert SVG to PDF document" },
       { name: "Any to SVG", href: "/convert/any-to-svg", description: "Vectorize any image instantly" }
     ]
   },
@@ -66,12 +75,86 @@ const converterGroups = [
     ]
   },
   {
-    title: "More Utilities",
+    title: "PDF Tools",
+    icon: <FileText size={24} />,
+    gradient: "from-red-500/20 to-red-500/5",
+    isNew: true,
+    tools: [
+      { name: "PDF to PNG", href: "/convert/pdf-to-png", description: "Extract images from PDF files", isNew: true },
+      { name: "PDF to JPG", href: "/convert/pdf-to-jpg", description: "Convert PDF pages to JPG images", isNew: true },
+      { name: "PDF Compressor", href: "/tools/pdf-compressor", description: "Reduce PDF file size", isNew: true },
+      { name: "PDF Merger", href: "/tools/pdf-merger", description: "Combine multiple PDFs into one", isNew: true }
+    ]
+  },
+  {
+    title: "Image Editing",
+    icon: <Crop size={24} />,
+    gradient: "from-orange-500/20 to-orange-500/5",
+    isNew: true,
+    tools: [
+      { name: "Image Resizer", href: "/tools/resizer", description: "Resize images to any dimension" },
+      { name: "Image Cropper", href: "/tools/image-cropper", description: "Crop images to perfect size", isNew: true },
+      { name: "Image Compressor", href: "/tools/image-compressor", description: "Reduce image file size", isNew: true },
+      { name: "Background Remover", href: "/tools/background-remover", description: "Remove background from images", isNew: true }
+    ]
+  },
+  {
+    title: "Color Tools",
+    icon: <Palette size={24} />,
+    gradient: "from-pink-500/20 to-pink-500/5",
+    isNew: true,
+    tools: [
+      { name: "Color Picker", href: "/tools/color-picker", description: "Pick colors from any image", isNew: true },
+      { name: "Palette Generator", href: "/tools/palette-generator", description: "Generate beautiful color palettes", isNew: true },
+      { name: "Gradient Generator", href: "/tools/gradient-generator", description: "Create stunning CSS gradients", isNew: true },
+      { name: "Color Converter", href: "/tools/color-converter", description: "Convert between HEX, RGB, HSL", isNew: true }
+    ]
+  },
+  {
+    title: "Text Tools",
+    icon: <Type size={24} />,
+    gradient: "from-teal-500/20 to-teal-500/5",
+    isNew: true,
+    tools: [
+      { name: "Lorem Ipsum Generator", href: "/tools/lorem-ipsum", description: "Generate placeholder text", isNew: true },
+      { name: "Word Counter", href: "/tools/word-counter", description: "Count words and characters", isNew: true },
+      { name: "Case Converter", href: "/tools/case-converter", description: "Convert text case styles", isNew: true }
+    ]
+  },
+  {
+    title: "Code Tools",
+    icon: <FileCode size={24} />,
+    gradient: "from-violet-500/20 to-violet-500/5",
+    isNew: true,
+    tools: [
+      { name: "JSON Formatter", href: "/tools/json-formatter", description: "Format and validate JSON", isNew: true },
+      { name: "Base64 Encoder", href: "/tools/base64", description: "Encode/decode Base64 strings", isNew: true },
+      { name: "HTML Minifier", href: "/tools/html-minifier", description: "Minify HTML code", isNew: true },
+      { name: "CSS Minifier", href: "/tools/css-minifier", description: "Minify CSS code", isNew: true }
+    ]
+  },
+  {
+    title: "QR & Barcode",
+    icon: <QrCode size={24} />,
+    gradient: "from-amber-500/20 to-amber-500/5",
+    isNew: true,
+    tools: [
+      { name: "QR Code Generator", href: "/tools/qr-generator", description: "Create QR codes instantly", isNew: true },
+      { name: "QR Code Reader", href: "/tools/qr-reader", description: "Scan and read QR codes", isNew: true },
+      { name: "Barcode Generator", href: "/tools/barcode-generator", description: "Generate various barcodes", isNew: true }
+    ]
+  },
+  {
+    title: "Video Tools",
     icon: <Repeat size={24} />,
     gradient: "from-rose-500/20 to-rose-500/5",
+    isNew: true,
     tools: [
       { name: "GIF to MP4", href: "/convert/gif-to-mp4", description: "Convert animated GIFs to video files" },
-      { name: "Image Resizer", href: "/tools/resizer", description: "Resize images to any dimension" }
+      { name: "MP4 to GIF", href: "/convert/mp4-to-gif", description: "Convert videos to animated GIFs with speed options", isNew: true },
+      { name: "Video Speed", href: "/tools/video-speed", description: "Change video speed from 0.25x to 4x", isNew: true },
+      { name: "Video Compressor", href: "/tools/video-compressor", description: "Reduce video file size with quality control", isNew: true },
+      { name: "Video Enhancer", href: "/tools/video-enhancer", description: "Upscale videos to 4K with filters", isNew: true }
     ]
   }
 ];
@@ -129,8 +212,15 @@ export default function Home() {
                     <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-white group-hover:bg-blue-600 group-hover:border-blue-500 transition-colors duration-300">
                       {group.icon}
                     </div>
-                    <div>
-                      <h3 className="font-black text-white text-xl uppercase tracking-wide">{group.title}</h3>
+                    <div className="flex-grow">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-black text-white text-xl uppercase tracking-wide">{group.title}</h3>
+                        {group.isNew && (
+                          <span className="px-2 py-0.5 text-[10px] font-black bg-emerald-500 text-white rounded-full uppercase tracking-wider animate-pulse">
+                            New
+                          </span>
+                        )}
+                      </div>
                       <p className="text-zinc-500 text-xs font-bold uppercase tracking-wider mt-1">{group.tools.length} Tools Available</p>
                     </div>
                   </div>
@@ -140,11 +230,19 @@ export default function Home() {
                       <Link
                         key={tIdx}
                         href={tool.href}
+                        target='_blank'
                         className="flex items-center justify-between p-3.5 rounded-lg bg-zinc-900/50 border border-white/5 hover:bg-white/10 hover:border-white/20 transition-all group/item"
                       >
-                        <span className="text-sm font-bold text-zinc-300 group-hover/item:text-white transition-colors">
-                          {tool.name}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-bold text-zinc-300 group-hover/item:text-white transition-colors">
+                            {tool.name}
+                          </span>
+                          {tool.isNew && (
+                            <span className="px-1.5 py-0.5 text-[8px] font-black bg-emerald-500/20 text-emerald-400 rounded uppercase tracking-wider border border-emerald-500/30">
+                              New
+                            </span>
+                          )}
+                        </div>
                         <ArrowRight size={16} className="text-zinc-600 group-hover/item:text-white transition-all opacity-0 group-hover/item:opacity-100 -translate-x-2 group-hover/item:translate-x-0" />
                       </Link>
                     ))}

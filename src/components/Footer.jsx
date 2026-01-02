@@ -51,7 +51,9 @@ export default function Footer() {
             title: 'More Tools',
             links: [
                 { name: 'GIF to MP4', href: '/convert/gif-to-mp4' },
-                { name: 'Image Resizer', href: '/tools/resizer' }
+                { name: 'Image Resizer', href: '/tools/resizer' },
+                { name: 'PDF Compressor', href: '/tools/pdf-compressor' },
+                { name: 'QR Generator', href: '/tools/qr-generator' }
             ]
         },
         {
