@@ -28,16 +28,16 @@ export default function CaseConverter() {
     return (
         <div className="max-w-4xl mx-auto px-4 py-20">
             <div className="text-center mb-12">
-                <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">Case Converter</h1>
-                <p className="text-black text-lg">Convert text between different case styles.</p>
+                <h1 className="text-4xl md:text-5xl font-black text-white mb-4">Case Converter</h1>
+                <p className="text-zinc-400 text-lg">Convert text between different case styles.</p>
             </div>
 
-            <div className="bg-white rounded-[2rem] border border-slate-200 p-8 md:p-12 shadow-xl">
+            <div className="bg-zinc-900/50 rounded-[2rem] border border-white/10 p-8 md:p-12 shadow-xl backdrop-blur-xl">
                 <textarea
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     placeholder="Enter your text here..."
-                    className="w-full h-48 p-6 rounded-xl bg-slate-50 border-2 border-transparent focus:border-teal-500 outline-none resize-none text-black placeholder:text-slate-400 mb-6"
+                    className="w-full h-48 p-6 rounded-xl bg-white/5 border border-white/10 focus:border-indigo-500 outline-none resize-none text-white placeholder:text-zinc-600 mb-6 transition-all text-lg"
                 />
 
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
@@ -45,26 +45,26 @@ export default function CaseConverter() {
                         <button
                             key={conv.label}
                             onClick={() => applyConversion(conv.fn)}
-                            className="py-3 px-4 bg-slate-100 hover:bg-teal-100 hover:text-teal-700 rounded-xl font-bold text-sm transition-all text-black cursor-pointer"
+                            className="py-3 px-4 bg-white/5 hover:bg-indigo-500/20 hover:border-indigo-500/50 border border-white/5 rounded-xl font-bold text-sm transition-all text-zinc-300 hover:text-white cursor-pointer"
                         >
                             {conv.label}
                         </button>
                     ))}
                 </div>
 
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                     <button
                         onClick={() => setText('')}
-                        className="text-black hover:text-rose-500 font-bold text-sm transition-colors cursor-pointer"
+                        className="text-zinc-500 hover:text-rose-500 font-bold text-sm transition-colors cursor-pointer"
                     >
-                        Clear
+                        Clear Text
                     </button>
                     {text && (
                         <button
                             onClick={copyText}
-                            className="bg-teal-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-teal-700 transition-all flex items-center gap-2 cursor-pointer"
+                            className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-indigo-700 transition-all flex items-center gap-2 cursor-pointer shadow-lg hover:shadow-indigo-500/20"
                         >
-                            {copied ? <Check size={18} /> : <Copy size={18} />}
+                            {copied ? <Check size={18} className="text-emerald-300" /> : <Copy size={18} />}
                             {copied ? 'Copied!' : 'Copy'}
                         </button>
                     )}

@@ -111,14 +111,14 @@ export default function GifToMp4() {
     return (
         <div className="max-w-4xl mx-auto px-4 py-20">
             <div className="text-center mb-12">
-                <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">GIF to Video Converter</h1>
-                <p className="text-black text-lg">Convert animated GIFs to MP4/WebM video.</p>
+                <h1 className="text-4xl md:text-5xl font-black text-white mb-4">GIF to Video Converter</h1>
+                <p className="text-zinc-400 text-lg">Convert animated GIFs to MP4/WebM video.</p>
             </div>
 
-            <div className="bg-white rounded-[2rem] border border-slate-200 p-8 md:p-12 shadow-xl">
+            <div className="bg-zinc-900/50 rounded-[2rem] border border-white/10 p-8 md:p-12 shadow-xl backdrop-blur-xl">
                 {!file ? (
-                    <div className="py-20 text-center border-4 border-dashed border-slate-100 rounded-3xl">
-                        <div className="w-20 h-20 bg-purple-100 rounded-full mx-auto mb-6 flex items-center justify-center">
+                    <div className="py-20 text-center border-4 border-dashed border-white/10 rounded-3xl bg-white/5">
+                        <div className="w-20 h-20 bg-purple-500/20 rounded-full mx-auto mb-6 flex items-center justify-center">
                             <Video size={32} className="text-purple-500" />
                         </div>
                         <button
@@ -132,14 +132,14 @@ export default function GifToMp4() {
                 ) : (
                     <div className="space-y-8">
                         {/* Preview */}
-                        <div className="flex justify-center bg-slate-100 p-4 rounded-xl">
+                        <div className="flex justify-center bg-white/5 p-4 rounded-xl border border-white/5">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img ref={imgRef} src={gifPreview} alt="GIF Preview" className="max-h-[300px] object-contain" />
                         </div>
 
                         {/* Settings */}
-                        <div className="p-4 bg-slate-50 rounded-xl max-w-md mx-auto">
-                            <label className="text-sm font-bold text-black flex items-center gap-2 mb-2">
+                        <div className="p-4 bg-white/5 rounded-xl max-w-md mx-auto border border-white/5">
+                            <label className="text-sm font-bold text-zinc-300 flex items-center gap-2 mb-2">
                                 <Clock size={16} /> Recording Duration: {duration}s
                             </label>
                             <input
@@ -149,15 +149,15 @@ export default function GifToMp4() {
                                 step="1"
                                 value={duration}
                                 onChange={(e) => setDuration(parseInt(e.target.value))}
-                                className="w-full h-2 bg-slate-200 rounded-lg cursor-pointer accent-purple-600"
+                                className="w-full h-2 bg-zinc-700 rounded-lg cursor-pointer accent-purple-500"
                             />
-                            <p className="text-xs text-slate-500 mt-2 text-center">
+                            <p className="text-xs text-zinc-500 mt-2 text-center">
                                 Since GIFs loop, specify how long to record the video.
                             </p>
                         </div>
 
                         {status === 'error' && (
-                            <div className="flex items-center gap-3 p-4 bg-rose-50 rounded-xl text-rose-600">
+                            <div className="flex items-center gap-3 p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-400">
                                 <AlertCircle size={20} />
                                 <span className="text-sm font-medium">{error}</span>
                             </div>
@@ -165,20 +165,20 @@ export default function GifToMp4() {
 
                         {status === 'processing' && (
                             <div className="space-y-2">
-                                <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
+                                <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
                                     <div
-                                        className="h-full bg-purple-600 transition-all duration-300"
+                                        className="h-full bg-purple-500 transition-all duration-300"
                                         style={{ width: `${Math.min(progress, 100)}%` }}
                                     />
                                 </div>
-                                <p className="text-sm text-black text-center">Recording... {Math.round(progress)}%</p>
+                                <p className="text-sm text-zinc-300 text-center">Recording... {Math.round(progress)}%</p>
                             </div>
                         )}
 
                         {status === 'success' && videoUrl && (
                             <div className="space-y-4">
-                                <p className="text-sm font-bold text-black text-center">Converted Video</p>
-                                <div className="rounded-xl overflow-hidden bg-slate-900 p-4 flex justify-center">
+                                <p className="text-sm font-bold text-zinc-300 text-center">Converted Video</p>
+                                <div className="rounded-xl overflow-hidden bg-black/50 p-4 flex justify-center border border-white/10">
                                     <video src={videoUrl} controls loop className="max-h-[300px]" />
                                 </div>
                             </div>
@@ -194,18 +194,18 @@ export default function GifToMp4() {
                                     >
                                         <Download size={20} /> Download Video
                                     </a>
-                                    <button onClick={() => { setVideoUrl(null); setStatus('idle'); }} className="bg-slate-100 text-black px-10 py-4 rounded-2xl font-bold cursor-pointer">Convert Again</button>
+                                    <button onClick={() => { setVideoUrl(null); setStatus('idle'); }} className="bg-zinc-800 text-white px-10 py-4 rounded-2xl font-bold cursor-pointer hover:bg-zinc-700 transition">Convert Again</button>
                                 </>
                             ) : status === 'processing' ? (
-                                <button disabled className="bg-slate-100 text-slate-400 px-10 py-4 rounded-2xl font-bold flex items-center gap-3 cursor-not-allowed">
+                                <button disabled className="bg-zinc-800 text-zinc-500 px-10 py-4 rounded-2xl font-bold flex items-center gap-3 cursor-not-allowed">
                                     <Loader2 size={24} className="animate-spin" /> Recording...
                                 </button>
                             ) : (
                                 <>
-                                    <button onClick={convertToMp4} className="bg-slate-900 text-white px-12 py-5 rounded-2xl font-bold text-xl hover:bg-purple-600 transition-all shadow-xl flex items-center gap-3 cursor-pointer">
+                                    <button onClick={convertToMp4} className="bg-white text-zinc-900 px-12 py-5 rounded-2xl font-bold text-xl hover:bg-purple-500 hover:text-white transition-all shadow-xl flex items-center gap-3 cursor-pointer">
                                         <Video size={20} /> Convert to Video
                                     </button>
-                                    <button onClick={() => { setFile(null); setGifPreview(null); }} className="bg-slate-100 text-black px-8 py-5 rounded-2xl font-bold cursor-pointer">
+                                    <button onClick={() => { setFile(null); setGifPreview(null); }} className="bg-zinc-800 text-white px-8 py-5 rounded-2xl font-bold cursor-pointer hover:bg-zinc-700 transition">
                                         <X size={20} />
                                     </button>
                                 </>

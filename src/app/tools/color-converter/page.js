@@ -53,33 +53,35 @@ export default function ColorConverter() {
     return (
         <div className="max-w-4xl mx-auto px-4 py-20">
             <div className="text-center mb-12">
-                <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">Color Converter</h1>
-                <p className="text-black text-lg">Convert between HEX, RGB, HSL and more.</p>
+                <h1 className="text-4xl md:text-5xl font-black text-white mb-4">Color Converter</h1>
+                <p className="text-zinc-400 text-lg">Convert between HEX, RGB, HSL and more.</p>
             </div>
 
-            <div className="bg-white rounded-[2rem] border border-slate-200 p-8 md:p-12 shadow-xl">
+            <div className="bg-zinc-900/50 rounded-[2rem] border border-white/10 p-8 md:p-12 shadow-xl backdrop-blur-xl">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                     {/* Color Preview */}
                     <div
-                        className="h-48 rounded-2xl shadow-inner"
+                        className="h-48 rounded-2xl shadow-inner border border-white/10 relative overflow-hidden"
                         style={{ backgroundColor: hex }}
-                    />
+                    >
+                        <div className="absolute inset-0 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)] pointer-events-none"></div>
+                    </div>
 
                     {/* Input */}
                     <div className="space-y-4">
-                        <label className="text-sm font-bold text-black block">Enter a color (HEX)</label>
+                        <label className="text-sm font-bold text-zinc-300 block">Enter a color (HEX)</label>
                         <div className="flex gap-3">
                             <input
                                 type="color"
                                 value={hex}
                                 onChange={(e) => setHex(e.target.value)}
-                                className="w-16 h-14 rounded-xl cursor-pointer"
+                                className="w-16 h-14 rounded-xl cursor-pointer bg-transparent border-0 p-0"
                             />
                             <input
                                 type="text"
                                 value={hex}
                                 onChange={(e) => setHex(e.target.value)}
-                                className="flex-grow px-6 py-4 rounded-xl bg-slate-50 border-2 border-transparent focus:border-pink-500 outline-none font-mono text-lg uppercase text-black"
+                                className="flex-grow px-6 py-4 rounded-xl bg-white/5 border border-white/10 focus:border-indigo-500 outline-none font-mono text-lg uppercase text-white placeholder-zinc-600 transition-all"
                                 placeholder="#000000"
                             />
                         </div>
@@ -89,16 +91,19 @@ export default function ColorConverter() {
                 {/* Conversions */}
                 <div className="space-y-3">
                     {formats.map((format) => (
-                        <div key={format.label} className="flex items-center justify-between p-4 bg-slate-50 rounded-xl">
+                        <div key={format.label} className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/5 hover:border-white/10 transition-colors">
                             <div>
-                                <p className="text-xs text-black uppercase font-bold">{format.label}</p>
-                                <p className="font-mono font-bold text-black">{format.value}</p>
+                                <p className="text-xs text-zinc-500 uppercase font-bold mb-1">{format.label}</p>
+                                <p className="font-mono font-bold text-zinc-200">{format.value}</p>
                             </div>
                             <button
                                 onClick={() => copyValue(format.value, format.label)}
-                                className="p-3 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+                                className="p-3 hover:bg-white/10 rounded-lg transition-colors cursor-pointer group"
                             >
-                                {copied === format.label ? <Check size={20} className="text-emerald-500" /> : <Copy size={20} className="text-slate-400" />}
+                                {copied === format.label ?
+                                    <Check size={20} className="text-emerald-500" /> :
+                                    <Copy size={20} className="text-zinc-500 group-hover:text-white" />
+                                }
                             </button>
                         </div>
                     ))}

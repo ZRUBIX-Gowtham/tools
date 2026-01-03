@@ -27,36 +27,36 @@ export default function WordCounter() {
     return (
         <div className="max-w-4xl mx-auto px-4 py-20">
             <div className="text-center mb-12">
-                <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">Word Counter</h1>
-                <p className="text-black text-lg">Count words, characters, sentences and more.</p>
+                <h1 className="text-4xl md:text-5xl font-black text-white mb-4">Word Counter</h1>
+                <p className="text-zinc-400 text-lg">Count words, characters, sentences and more.</p>
             </div>
 
-            <div className="bg-white rounded-[2rem] border border-slate-200 p-8 md:p-12 shadow-xl">
+            <div className="bg-zinc-900/50 rounded-[2rem] border border-white/10 p-8 md:p-12 shadow-xl backdrop-blur-xl">
                 {/* Stats Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-                    <div className="bg-slate-50 rounded-xl p-4 text-center">
-                        <p className="text-3xl font-black text-teal-600">{stats.words}</p>
-                        <p className="text-xs font-bold text-black uppercase">Words</p>
+                    <div className="bg-white/5 rounded-xl p-4 text-center border border-white/5">
+                        <p className="text-3xl font-black text-indigo-400">{stats.words}</p>
+                        <p className="text-xs font-bold text-zinc-500 uppercase">Words</p>
                     </div>
-                    <div className="bg-slate-50 rounded-xl p-4 text-center">
-                        <p className="text-3xl font-black text-teal-600">{stats.characters}</p>
-                        <p className="text-xs font-bold text-black uppercase">Characters</p>
+                    <div className="bg-white/5 rounded-xl p-4 text-center border border-white/5">
+                        <p className="text-3xl font-black text-indigo-400">{stats.characters}</p>
+                        <p className="text-xs font-bold text-zinc-500 uppercase">Characters</p>
                     </div>
-                    <div className="bg-slate-50 rounded-xl p-4 text-center">
-                        <p className="text-3xl font-black text-teal-600">{stats.charactersNoSpaces}</p>
-                        <p className="text-xs font-bold text-black uppercase">No Spaces</p>
+                    <div className="bg-white/5 rounded-xl p-4 text-center border border-white/5">
+                        <p className="text-3xl font-black text-indigo-400">{stats.charactersNoSpaces}</p>
+                        <p className="text-xs font-bold text-zinc-500 uppercase">No Spaces</p>
                     </div>
-                    <div className="bg-slate-50 rounded-xl p-4 text-center">
-                        <p className="text-3xl font-black text-teal-600">{stats.sentences}</p>
-                        <p className="text-xs font-bold text-black uppercase">Sentences</p>
+                    <div className="bg-white/5 rounded-xl p-4 text-center border border-white/5">
+                        <p className="text-3xl font-black text-indigo-400">{stats.sentences}</p>
+                        <p className="text-xs font-bold text-zinc-500 uppercase">Sentences</p>
                     </div>
-                    <div className="bg-slate-50 rounded-xl p-4 text-center">
-                        <p className="text-3xl font-black text-teal-600">{stats.paragraphs}</p>
-                        <p className="text-xs font-bold text-black uppercase">Paragraphs</p>
+                    <div className="bg-white/5 rounded-xl p-4 text-center border border-white/5">
+                        <p className="text-3xl font-black text-indigo-400">{stats.paragraphs}</p>
+                        <p className="text-xs font-bold text-zinc-500 uppercase">Paragraphs</p>
                     </div>
-                    <div className="bg-slate-50 rounded-xl p-4 text-center">
-                        <p className="text-3xl font-black text-teal-600">{stats.readingTime}</p>
-                        <p className="text-xs font-bold text-black uppercase">Min Read</p>
+                    <div className="bg-white/5 rounded-xl p-4 text-center border border-white/5">
+                        <p className="text-3xl font-black text-indigo-400">{stats.readingTime}</p>
+                        <p className="text-xs font-bold text-zinc-500 uppercase">Min Read</p>
                     </div>
                 </div>
 
@@ -65,13 +65,13 @@ export default function WordCounter() {
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     placeholder="Start typing or paste your text here..."
-                    className="w-full h-64 p-6 rounded-xl bg-slate-50 border-2 border-transparent focus:border-teal-500 outline-none resize-none text-black placeholder:text-slate-400"
+                    className="w-full h-64 p-6 rounded-xl bg-white/5 border border-white/10 focus:border-indigo-500 outline-none resize-none text-white placeholder:text-zinc-600 transition-all text-lg leading-relaxed"
                 />
 
                 <div className="flex justify-end mt-4">
                     <button
                         onClick={() => setText('')}
-                        className="text-black hover:text-rose-500 font-bold text-sm transition-colors cursor-pointer"
+                        className="text-zinc-500 hover:text-rose-500 font-bold text-sm transition-colors cursor-pointer flex items-center gap-2"
                     >
                         Clear Text
                     </button>
