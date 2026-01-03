@@ -16,14 +16,13 @@ export default function BarcodeGenerator() {
     ];
 
     useEffect(() => {
+        const generateBarcode = () => {
+            // Using bwip-js would be ideal, for now using placeholder
+            const url = `https://barcodeapi.org/api/${type}/${encodeURIComponent(text)}`;
+            setBarcodeUrl(url);
+        };
         generateBarcode();
     }, [text, type]);
-
-    const generateBarcode = () => {
-        // Using bwip-js would be ideal, for now using placeholder
-        const url = `https://barcodeapi.org/api/${type}/${encodeURIComponent(text)}`;
-        setBarcodeUrl(url);
-    };
 
     const downloadBarcode = async () => {
         try {
@@ -79,12 +78,15 @@ export default function BarcodeGenerator() {
                     <div className="flex flex-col items-center justify-center space-y-6">
                         <div className="bg-white p-6 rounded-2xl shadow-lg border border-slate-100 w-full">
                             {barcodeUrl && (
-                                <img
-                                    src={barcodeUrl}
-                                    alt="Barcode"
-                                    className="mx-auto max-w-full h-auto"
-                                    onError={(e) => e.target.style.display = 'none'}
-                                />
+                                <>
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img
+                                        src={barcodeUrl}
+                                        alt="Barcode"
+                                        className="mx-auto max-w-full h-auto"
+                                        onError={(e) => e.target.style.display = 'none'}
+                                    />
+                                </>
                             )}
                         </div>
                         <button

@@ -199,6 +199,7 @@ export default function ImageCropper() {
                         <div className="text-center">
                             <p className="text-sm font-bold text-emerald-600 mb-4">✓ Cropped Successfully!</p>
                             <div className="rounded-xl overflow-hidden bg-slate-100 p-4 inline-block">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img src={croppedUrl} alt="Cropped" className="max-w-full max-h-[400px] rounded-lg" />
                             </div>
                         </div>
@@ -220,6 +221,7 @@ export default function ImageCropper() {
                         >
                             {/* Image */}
                             <div className="relative" style={{ width: imageSize.width * scale, height: imageSize.height * scale }}>
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
                                     ref={imageRef}
                                     src={preview}

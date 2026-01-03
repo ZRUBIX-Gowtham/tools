@@ -172,7 +172,7 @@ export default function VideoCompressor() {
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={handleDrop}
                 className={`relative group rounded-[2rem] border-2 border-dashed transition-all duration-300 ${status === 'error' ? 'border-rose-500/50 bg-rose-500/5' :
-                        file ? 'border-rose-500/50 bg-rose-500/5' : 'border-slate-800 bg-white/5 hover:border-rose-400 hover:bg-white/10'
+                    file ? 'border-rose-500/50 bg-rose-500/5' : 'border-slate-800 bg-white/5 hover:border-rose-400 hover:bg-white/10'
                     } p-12 text-center backdrop-blur-sm`}
             >
                 <AnimatePresence mode="wait">
@@ -337,7 +337,7 @@ export default function VideoCompressor() {
                 </div>
                 <div className="space-y-3">
                     <div className="text-slate-200 font-bold uppercase tracking-widest text-xs">Fast</div>
-                    <p className="text-slate-500 leading-relaxed font-light">Harness your computer's power for quick processing without server uploads.</p>
+                    <p className="text-slate-500 leading-relaxed font-light">Harness your computer&apos;s power for quick processing without server uploads.</p>
                 </div>
             </div>
         </div>

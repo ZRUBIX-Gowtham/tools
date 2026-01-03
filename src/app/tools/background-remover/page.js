@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Eraser, Download, X, Loader2, AlertCircle, Sliders, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function BackgroundRemover() {
@@ -101,15 +101,15 @@ export default function BackgroundRemover() {
     };
 
     const handleMouseDown = () => setIsDragging(true);
-    const handleMouseUp = () => setIsDragging(false);
+    const handleMouseUp = useCallback(() => setIsDragging(false), []);
 
-    const handleMouseMove = (e) => {
+    const handleMouseMove = useCallback((e) => {
         if (!isDragging || !containerRef.current) return;
         const rect = containerRef.current.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const percentage = Math.min(100, Math.max(0, (x / rect.width) * 100));
         setSliderPosition(percentage);
-    };
+    }, [isDragging]);
 
     const handleTouchMove = (e) => {
         if (!containerRef.current) return;
@@ -127,7 +127,7 @@ export default function BackgroundRemover() {
             window.removeEventListener('mouseup', handleMouseUp);
             window.removeEventListener('mousemove', handleMouseMove);
         };
-    }, [isDragging]);
+    }, [isDragging, handleMouseUp, handleMouseMove]);
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white px-4 py-12">
@@ -174,6 +174,7 @@ export default function BackgroundRemover() {
                                     >
                                         {/* Original Image (Left) */}
                                         <div className="absolute inset-0">
+                                            {/* eslint-disable-next-line @next/next/no-img-element */}
                                             <img
                                                 src={preview}
                                                 alt="Original"
@@ -187,6 +188,7 @@ export default function BackgroundRemover() {
                                             style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
                                         >
                                             <div className="w-full h-full bg-[url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGElEQVQYlWNgYGCQwoKxgqGgcJA5h3yFAXcgBQVOHm4VAAAAAElFTkSuQmCC')]">
+                                                {/* eslint-disable-next-line @next/next/no-img-element */}
                                                 <img
                                                     src={resultUrl}
                                                     alt="Result"
@@ -223,6 +225,7 @@ export default function BackgroundRemover() {
                                     <div className="space-y-2">
                                         <p className="text-sm font-bold text-black text-center">Original</p>
                                         <div className="rounded-xl overflow-hidden bg-slate-100 p-4 min-h-[300px] flex items-center justify-center">
+                                            {/* eslint-disable-next-line @next/next/no-img-element */}
                                             <img src={preview} alt="Original" className="max-w-full max-h-[400px] mx-auto rounded-lg" />
                                         </div>
                                     </div>

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Video, Download, X, Loader2, AlertCircle, Sparkles, Upload, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -158,15 +158,15 @@ export default function VideoEnhancer() {
     };
 
     const handleMouseDown = () => setIsDragging(true);
-    const handleMouseUp = () => setIsDragging(false);
+    const handleMouseUp = useCallback(() => setIsDragging(false), []);
 
-    const handleMouseMove = (e) => {
+    const handleMouseMove = useCallback((e) => {
         if (!isDragging || !containerRef.current) return;
         const rect = containerRef.current.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const percentage = Math.min(100, Math.max(0, (x / rect.width) * 100));
         setSliderPosition(percentage);
-    };
+    }, [isDragging]);
 
     const handleTouchMove = (e) => {
         if (!containerRef.current) return;
@@ -184,7 +184,7 @@ export default function VideoEnhancer() {
             window.removeEventListener('mouseup', handleMouseUp);
             window.removeEventListener('mousemove', handleMouseMove);
         };
-    }, [isDragging]);
+    }, [isDragging, handleMouseUp, handleMouseMove]);
 
     const reset = () => {
         setFile(null);
@@ -219,7 +219,7 @@ export default function VideoEnhancer() {
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={handleDrop}
                 className={`relative group rounded-[2rem] border-2 border-dashed transition-all duration-300 ${status === 'error' ? 'border-rose-500/50 bg-rose-500/5' :
-                        file ? 'border-purple-500/50 bg-purple-500/5' : 'border-slate-800 bg-white/5 hover:border-purple-400 hover:bg-white/10'
+                    file ? 'border-purple-500/50 bg-purple-500/5' : 'border-slate-800 bg-white/5 hover:border-purple-400 hover:bg-white/10'
                     } p-12 text-center backdrop-blur-sm`}
             >
                 <AnimatePresence mode="wait">
@@ -278,8 +278,8 @@ export default function VideoEnhancer() {
                                             key={r.value}
                                             onClick={() => setResolution(r.value)}
                                             className={`p-4 rounded-xl border-2 transition-all cursor-pointer ${resolution === r.value
-                                                    ? 'border-purple-500 bg-purple-500/20 text-purple-300'
-                                                    : 'border-white/10 hover:border-purple-400/50 text-slate-300 bg-white/5'
+                                                ? 'border-purple-500 bg-purple-500/20 text-purple-300'
+                                                : 'border-white/10 hover:border-purple-400/50 text-slate-300 bg-white/5'
                                                 }`}
                                         >
                                             <div className="text-2xl font-black mb-1">{r.icon}</div>
@@ -301,8 +301,8 @@ export default function VideoEnhancer() {
                                             key={filter.id}
                                             onClick={() => setEnhanceFilter(filter.id)}
                                             className={`p-3 rounded-xl border-2 transition-all cursor-pointer ${enhanceFilter === filter.id
-                                                    ? 'border-purple-500 bg-purple-500/20'
-                                                    : 'border-white/10 hover:border-purple-400/50 bg-white/5'
+                                                ? 'border-purple-500 bg-purple-500/20'
+                                                : 'border-white/10 hover:border-purple-400/50 bg-white/5'
                                                 }`}
                                         >
                                             <div

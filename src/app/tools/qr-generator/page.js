@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { QrCode, Download, Copy, Check, Settings, Palette, Layout } from 'lucide-react';
 
 const QR_TEMPLATES = [
@@ -31,18 +31,18 @@ export default function QRGenerator() {
     const [bgColor, setBgColor] = useState('#ffffff');
     const [activeTab, setActiveTab] = useState('custom');
 
-    useEffect(() => {
-        generateQR();
-    }, [text, size, fgColor, bgColor]);
-
-    const generateQR = () => {
+    const generateQR = useCallback(() => {
         if (!text.trim()) return;
         // Using QR Server API with color support
         const fg = fgColor.replace('#', '');
         const bg = bgColor.replace('#', '');
         const url = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}&color=${fg}&bgcolor=${bg}`;
         setQrUrl(url);
-    };
+    }, [text, fgColor, bgColor, size]);
+
+    useEffect(() => {
+        generateQR();
+    }, [generateQR]);
 
     const applyTemplate = (template) => {
         setFgColor(template.fg);
@@ -135,8 +135,8 @@ export default function QRGenerator() {
                                             key={template.name}
                                             onClick={() => applyTemplate(template)}
                                             className={`p-3 rounded-xl border-2 transition-all cursor-pointer hover:scale-105 ${fgColor === template.fg && bgColor === template.bg
-                                                    ? 'border-amber-500 ring-2 ring-amber-200'
-                                                    : 'border-slate-200 hover:border-slate-300'
+                                                ? 'border-amber-500 ring-2 ring-amber-200'
+                                                : 'border-slate-200 hover:border-slate-300'
                                                 }`}
                                         >
                                             <div
@@ -227,12 +227,15 @@ export default function QRGenerator() {
                             style={{ backgroundColor: bgColor }}
                         >
                             {qrUrl && (
-                                <img
-                                    src={qrUrl}
-                                    alt="QR Code"
-                                    className="mx-auto"
-                                    style={{ width: Math.min(size, 280), height: Math.min(size, 280) }}
-                                />
+                                <>
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img
+                                        src={qrUrl}
+                                        alt="QR Code"
+                                        className="mx-auto"
+                                        style={{ width: Math.min(size, 280), height: Math.min(size, 280) }}
+                                    />
+                                </>
                             )}
                         </div>
 

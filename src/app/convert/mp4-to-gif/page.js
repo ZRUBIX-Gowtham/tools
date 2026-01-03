@@ -181,8 +181,8 @@ export default function MP4ToGIF() {
                                         key={option.value}
                                         onClick={() => setSpeed(option.value)}
                                         className={`p-4 rounded-xl border-2 transition-all cursor-pointer ${speed === option.value
-                                                ? 'border-purple-500 bg-purple-50 text-purple-700'
-                                                : 'border-slate-200 hover:border-purple-300 text-black'
+                                            ? 'border-purple-500 bg-purple-50 text-purple-700'
+                                            : 'border-slate-200 hover:border-purple-300 text-black'
                                             }`}
                                     >
                                         <div className="font-bold text-lg">{option.label}</div>
@@ -275,6 +275,7 @@ export default function MP4ToGIF() {
                             <div className="space-y-4">
                                 <p className="text-sm font-bold text-black text-center">Generated GIF ({speed}x speed)</p>
                                 <div className="rounded-xl overflow-hidden bg-slate-100 p-4 flex justify-center">
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img src={gifUrl} alt="Generated GIF" className="max-w-full max-h-[300px] rounded-lg" />
                                 </div>
                             </div>

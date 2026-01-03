@@ -126,6 +126,7 @@ export default function QRReader() {
                     <div className="space-y-6">
                         {/* Preview */}
                         <div className="rounded-xl overflow-hidden bg-slate-100 p-4 max-h-[300px] flex items-center justify-center">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src={preview} alt="QR Code" className="max-w-full max-h-[280px] rounded-lg" />
                         </div>
 
