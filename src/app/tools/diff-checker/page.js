@@ -1,218 +1,285 @@
 "use client";
-import { useState } from 'react';
-import * as Diff from 'diff';
-import { Copy, RotateCcw, ArrowRightLeft, Check, Split, FileDiff, Settings, ShieldCheck, Zap } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 
-export default function DiffChecker() {
-    const [original, setOriginal] = useState('');
-    const [modified, setModified] = useState('');
+import React, { useState, useEffect, useRef } from 'react';
+import { diffWords, diffLines, diffChars } from 'diff';
+import { Copy, Trash2, ArrowRightLeft, FileText, Type, AlignJustify, Check, Upload } from 'lucide-react';
+
+const DiffChecker = () => {
+    const [originalText, setOriginalText] = useState('');
+    const [modifiedText, setModifiedText] = useState('');
     const [diffResult, setDiffResult] = useState([]);
-    const [showDiff, setShowDiff] = useState(false);
-    const [diffMode, setDiffMode] = useState('chars'); // 'chars' or 'lines' or 'words'
-
-    // UI States
+    const [diffMode, setDiffMode] = useState('words'); // words, chars, lines
     const [copied, setCopied] = useState(false);
 
-    const compareText = () => {
-        if (!original && !modified) return;
+    const originalFileRef = useRef(null);
+    const modifiedFileRef = useRef(null);
 
+    useEffect(() => {
+        handleCompare();
+    }, [originalText, modifiedText, diffMode]);
+
+    const handleCompare = () => {
         let diff;
-        if (diffMode === 'lines') {
-            diff = Diff.diffLines(original, modified);
-        } else if (diffMode === 'words') {
-            diff = Diff.diffWords(original, modified);
+        if (diffMode === 'chars') {
+            diff = diffChars(originalText, modifiedText);
+        } else if (diffMode === 'lines') {
+            diff = diffLines(originalText, modifiedText);
         } else {
-            diff = Diff.diffChars(original, modified);
+            diff = diffWords(originalText, modifiedText);
         }
-
         setDiffResult(diff);
-        setShowDiff(true);
     };
 
-    const clearAll = () => {
-        setOriginal('');
-        setModified('');
-        setDiffResult([]);
-        setShowDiff(false);
-    };
-
-    const copyResult = () => {
-        const text = diffResult.map(part => part.value).join('');
-        navigator.clipboard.writeText(text);
+    const handleCopy = () => {
+        navigator.clipboard.writeText(modifiedText);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
 
-    return (
-        <div className="max-w-7xl mx-auto px-4 py-20 relative z-10">
-            {/* Header */}
-            <div className="text-center mb-12">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="inline-flex items-center justify-center p-3 mb-6 rounded-2xl bg-violet-500/10 text-violet-400 border border-violet-500/20"
-                >
-                    <FileDiff size={40} />
-                </motion.div>
-                <motion.h1
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight"
-                >
-                    Diff <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400">Checker</span>
-                </motion.h1>
-                <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="text-slate-400 text-lg font-light max-w-2xl mx-auto"
-                >
-                    Compare two text files or code snippets to find the differences.
-                    Highlight changes, additions, and deletions instantly.
-                </motion.p>
-            </div>
+    const clearAll = () => {
+        setOriginalText('');
+        setModifiedText('');
+        if (originalFileRef.current) originalFileRef.current.value = '';
+        if (modifiedFileRef.current) modifiedFileRef.current.value = '';
+    };
 
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="bg-[#0a0a0a] rounded-[2rem] border border-white/10 shadow-2xl overflow-hidden"
-            >
-                {/* Controls */}
-                <div className="p-6 border-b border-white/10 bg-white/5 flex flex-wrap items-center justify-between gap-4">
-                    <div className="flex bg-black/40 p-1 rounded-xl border border-white/5">
-                        {['chars', 'words', 'lines'].map((mode) => (
+    const loadSample = () => {
+        setOriginalText('The quick brown fox jumps over the lazy dog.\nThis is a simple text comparison tool.');
+        setModifiedText('The quick red fox jumped over the lazy dog.\nThis is a advanced text comparison tool.');
+    };
+
+    const handleFileUpload = (e, target) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            if (target === 'original') {
+                setOriginalText(e.target.result);
+            } else {
+                setModifiedText(e.target.result);
+            }
+        };
+        reader.readAsText(file);
+    };
+
+    return (
+        <div className="min-h-screen bg-[#050505] text-gray-300 font-sans selection:bg-blue-500/30">
+
+            {/* Header Section */}
+            <div className="bg-[#0a0a0a] border-b border-white/5 pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-full opacity-30 pointer-events-none">
+                    <div className="absolute top-[-10%] right-[-5%] w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+                    <div className="absolute bottom-[-10%] left-[-5%] w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+                </div>
+
+                <div className="max-w-7xl mx-auto text-center relative z-10">
+                    <h1 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 mb-6 tracking-tight">
+                        Online Diff Checker
+                    </h1>
+                    <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-8 leading-relaxed">
+                        Compare two text files or strings side-by-side to instantly visualize differences.
+                        Efficient, secure, and entirely browser-based.
+                    </p>
+
+                    {/* Controls */}
+                    <div className="flex flex-wrap justify-center gap-4 animate-fade-in-up">
+                        <div className="flex items-center bg-[#151515] p-1.5 rounded-lg border border-white/10 shadow-xl">
                             <button
-                                key={mode}
-                                onClick={() => setDiffMode(mode)}
-                                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all capitalize ${diffMode === mode
-                                        ? 'bg-violet-600 text-white shadow-lg shadow-violet-900/20'
-                                        : 'text-slate-500 hover:text-slate-300'
+                                onClick={() => setDiffMode('chars')}
+                                className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center gap-2 ${diffMode === 'chars' ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400 hover:text-white hover:bg-white/5'
                                     }`}
                             >
-                                {mode}
+                                <Type size={16} />
+                                Chars
                             </button>
-                        ))}
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                        <button
-                            onClick={clearAll}
-                            className="flex items-center gap-2 px-4 py-2 text-slate-500 hover:text-rose-500 font-bold transition-colors"
-                        >
-                            <RotateCcw size={18} />
-                            Clear
-                        </button>
-                        <button
-                            onClick={compareText}
-                            className="flex items-center gap-2 bg-white text-black hover:bg-violet-50 px-6 py-2.5 rounded-xl font-bold transition-all shadow-lg hover:shadow-violet-500/10"
-                        >
-                            <ArrowRightLeft size={18} />
-                            Compare Now
-                        </button>
-                    </div>
-                </div>
-
-                {/* Input Area */}
-                {!showDiff && (
-                    <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-white/10">
-                        <div className="p-6 md:p-8">
-                            <label className="block text-sm font-bold text-slate-400 mb-3 ml-1 uppercase tracking-wider">Original Text</label>
-                            <textarea
-                                value={original}
-                                onChange={(e) => setOriginal(e.target.value)}
-                                placeholder="Paste original text here..."
-                                className="w-full h-96 p-4 rounded-xl bg-white/5 border border-white/10 focus:border-violet-500/50 focus:bg-white/10 outline-none resize-none transition-all font-mono text-sm leading-relaxed text-slate-300 placeholder:text-slate-600"
-                            />
-                        </div>
-                        <div className="p-6 md:p-8">
-                            <label className="block text-sm font-bold text-slate-400 mb-3 ml-1 uppercase tracking-wider">Modified Text</label>
-                            <textarea
-                                value={modified}
-                                onChange={(e) => setModified(e.target.value)}
-                                placeholder="Paste modified text here..."
-                                className="w-full h-96 p-4 rounded-xl bg-white/5 border border-white/10 focus:border-violet-500/50 focus:bg-white/10 outline-none resize-none transition-all font-mono text-sm leading-relaxed text-slate-300 placeholder:text-slate-600"
-                            />
-                        </div>
-                    </div>
-                )}
-
-                {/* Diff Result */}
-                {showDiff && (
-                    <div className="p-6 md:p-8">
-                        <div className="flex items-center justify-between mb-4">
-                            <h3 className="font-bold text-slate-200 text-lg">Comparison Result</h3>
                             <button
-                                onClick={() => setShowDiff(false)}
-                                className="text-sm font-bold text-violet-400 hover:text-violet-300 underline underline-offset-4"
+                                onClick={() => setDiffMode('words')}
+                                className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center gap-2 ${diffMode === 'words' ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400 hover:text-white hover:bg-white/5'
+                                    }`}
                             >
-                                Edit Inputs
+                                <FileText size={16} />
+                                Words
+                            </button>
+                            <button
+                                onClick={() => setDiffMode('lines')}
+                                className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center gap-2 ${diffMode === 'lines' ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400 hover:text-white hover:bg-white/5'
+                                    }`}
+                            >
+                                <AlignJustify size={16} />
+                                Lines
                             </button>
                         </div>
 
-                        <div className="w-full bg-black rounded-xl overflow-hidden border border-white/10">
-                            {/* Toolbar */}
-                            <div className="bg-white/5 px-4 py-2 border-b border-white/10 flex items-center justify-between">
-                                <div className="flex items-center gap-4 text-xs font-mono">
-                                    <span className="flex items-center gap-1.5 text-slate-400">
-                                        <span className="w-3 h-3 rounded-full bg-rose-500/20 border border-rose-500/50"></span>
-                                        Removed
-                                    </span>
-                                    <span className="flex items-center gap-1.5 text-slate-400">
-                                        <span className="w-3 h-3 rounded-full bg-emerald-500/20 border border-emerald-500/50"></span>
-                                        Added
-                                    </span>
-                                </div>
-                                <button
-                                    onClick={copyResult}
-                                    className="text-xs text-slate-500 hover:text-violet-400 flex items-center gap-1 transition-colors"
-                                >
-                                    {copied ? <Check size={12} /> : <Copy size={12} />}
-                                    {copied ? 'Copied' : 'Copy Text'}
-                                </button>
-                            </div>
-
-                            {/* Content */}
-                            <div className="p-6 overflow-auto font-mono text-sm leading-relaxed max-h-[600px] whitespace-pre-wrap text-slate-300">
-                                {diffResult.map((part, index) => {
-                                    const color = part.added ? 'bg-emerald-500/20 text-emerald-200 border-b border-emerald-500/30' :
-                                        part.removed ? 'bg-rose-500/20 text-rose-200 border-b border-rose-500/30' :
-                                            'text-slate-400';
-                                    return (
-                                        <span key={index} className={`${color} px-0.5 rounded-[1px]`}>
-                                            {part.value}
-                                        </span>
-                                    );
-                                })}
-                            </div>
+                        <div className="flex items-center gap-3">
+                            <button
+                                onClick={loadSample}
+                                className="px-5 py-2.5 rounded-lg bg-[#151515] hover:bg-[#202020] border border-white/10 text-gray-300 font-medium text-sm transition-all hover:border-white/20 flex items-center gap-2"
+                            >
+                                <ArrowRightLeft size={16} />
+                                Load Sample
+                            </button>
+                            <button
+                                onClick={clearAll}
+                                className="px-5 py-2.5 rounded-lg bg-[#151515] hover:bg-red-900/20 border border-white/10 hover:border-red-500/30 text-gray-300 hover:text-red-400 font-medium text-sm transition-all flex items-center gap-2 group"
+                            >
+                                <Trash2 size={16} className="group-hover:animate-bounce-short" />
+                                Clear
+                            </button>
                         </div>
                     </div>
-                )}
-            </motion.div>
-
-            {/* Trust Badges */}
-            <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 text-center text-sm">
-                <div className="space-y-3">
-                    <div className="text-slate-200 font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-2">
-                        <ShieldCheck size={14} className="text-emerald-500" /> Secure
-                    </div>
-                    <p className="text-slate-500 leading-relaxed font-light">Your text/code is processed locally in your browser. We never see your data.</p>
-                </div>
-                <div className="space-y-3">
-                    <div className="text-slate-200 font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-2">
-                        <Settings size={14} className="text-blue-500" /> Customizable
-                    </div>
-                    <p className="text-slate-500 leading-relaxed font-light">Compare by characters, words, or lines to get the exact view you need.</p>
-                </div>
-                <div className="space-y-3">
-                    <div className="text-slate-200 font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-2">
-                        <Zap size={14} className="text-amber-500" /> Instant
-                    </div>
-                    <p className="text-slate-500 leading-relaxed font-light">Zero latency. Paste and compare immediately without server uploads.</p>
                 </div>
             </div>
+
+            {/* Main Content */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+
+                    {/* Original Text Input */}
+                    <div className="flex flex-col gap-3">
+                        <div className="flex justify-between items-center px-1">
+                            <label className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Original Text</label>
+                            <div className="flex items-center gap-3">
+                                <button
+                                    onClick={() => originalFileRef.current?.click()}
+                                    className="text-xs flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all border border-white/5"
+                                >
+                                    <Upload size={12} /> Upload File
+                                </button>
+                                <input
+                                    type="file"
+                                    ref={originalFileRef}
+                                    className="hidden"
+                                    onChange={(e) => handleFileUpload(e, 'original')}
+                                    accept=".txt,.js,.css,.html,.json,.md"
+                                />
+                                <span className="text-xs text-gray-600 font-mono">{originalText.length} chars</span>
+                            </div>
+                        </div>
+                        <div className="group relative">
+                            <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                            <textarea
+                                value={originalText}
+                                onChange={(e) => setOriginalText(e.target.value)}
+                                placeholder="Paste original text here..."
+                                className="relative w-full h-80 bg-[#121212] border border-white/10 text-gray-300 rounded-xl p-5 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent resize-none font-mono text-sm leading-relaxed transition-all shadow-inner placeholder:text-gray-700"
+                            />
+                        </div>
+                    </div>
+
+                    {/* New Text Input */}
+                    <div className="flex flex-col gap-3">
+                        <div className="flex justify-between items-center px-1">
+                            <label className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Modified Text</label>
+                            <div className="flex items-center gap-3">
+                                <button
+                                    onClick={() => modifiedFileRef.current?.click()}
+                                    className="text-xs flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all border border-white/5"
+                                >
+                                    <Upload size={12} /> Upload File
+                                </button>
+                                <input
+                                    type="file"
+                                    ref={modifiedFileRef}
+                                    className="hidden"
+                                    onChange={(e) => handleFileUpload(e, 'modified')}
+                                    accept=".txt,.js,.css,.html,.json,.md"
+                                />
+                                <span className="text-xs text-gray-600 font-mono">{modifiedText.length} chars</span>
+                            </div>
+                        </div>
+                        <div className="group relative">
+                            <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                            <textarea
+                                value={modifiedText}
+                                onChange={(e) => setModifiedText(e.target.value)}
+                                placeholder="Paste modified text here..."
+                                className="relative w-full h-80 bg-[#121212] border border-white/10 text-gray-300 rounded-xl p-5 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent resize-none font-mono text-sm leading-relaxed transition-all shadow-inner placeholder:text-gray-700"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Diff Output */}
+                {(originalText || modifiedText) && (
+                    <div className="animate-fade-in">
+                        <div className="flex items-center justify-between mb-4 px-1">
+                            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                                <span className="w-8 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full block"></span>
+                                Comparison Result
+                            </h2>
+                            <button
+                                onClick={handleCopy}
+                                className="text-xs font-medium text-gray-500 hover:text-white flex items-center gap-1.5 transition-colors"
+                            >
+                                {copied ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
+                                {copied ? 'Copied Modified Text' : 'Copy Modified Text'}
+                            </button>
+                        </div>
+
+                        <div className="relative rounded-xl overflow-hidden border border-white/10 bg-[#0f0f0f] shadow-2xl">
+                            <div className="absolute top-0 left-0 w-full h-8 bg-[#1a1a1a] border-b border-white/5 flex items-center px-4 gap-2">
+                                <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></div>
+                                <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50"></div>
+                                <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
+                            </div>
+
+                            <div className="p-6 pt-12 overflow-x-auto">
+                                <pre className="font-mono text-sm leading-relaxed whitespace-pre-wrap break-words">
+                                    {diffResult.map((part, index) => {
+                                        const color = part.added
+                                            ? 'bg-green-500/20 text-green-300 border-b-2 border-green-500/30'
+                                            : part.removed
+                                                ? 'bg-red-500/20 text-red-300 border-b-2 border-red-500/30 decoration-slice line-through decoration-red-500/50'
+                                                : 'text-gray-400';
+
+                                        return (
+                                            <span key={index} className={`${color} px-0.5 rounded-sm transition-colors duration-300`}>
+                                                {part.value}
+                                            </span>
+                                        );
+                                    })}
+                                </pre>
+                            </div>
+
+                            <div className="bg-[#1a1a1a] border-t border-white/5 px-6 py-3 flex items-center gap-6 text-xs font-mono text-gray-500">
+                                <div className="flex items-center gap-2">
+                                    <span className="w-3 h-3 bg-red-500/20 border border-red-500/30 rounded-sm"></span>
+                                    Removed
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <span className="w-3 h-3 bg-green-500/20 border border-green-500/30 rounded-sm"></span>
+                                    Added
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            <style jsx global>{`
+        @keyframes blob {
+          0% { transform: translate(0px, 0px) scale(1); }
+          33% { transform: translate(30px, -50px) scale(1.1); }
+          66% { transform: translate(-20px, 20px) scale(0.9); }
+          100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-blob {
+          animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+          animation-delay: 2s;
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
         </div>
     );
-}
+};
+
+export default DiffChecker;

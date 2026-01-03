@@ -103,14 +103,14 @@ export default function QRReader() {
     return (
         <div className="max-w-4xl mx-auto px-4 py-20">
             <div className="text-center mb-12">
-                <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">QR Code Reader</h1>
-                <p className="text-black text-lg">Scan and decode QR codes from images.</p>
+                <h1 className="text-4xl md:text-5xl font-black text-white mb-4">QR Code Reader</h1>
+                <p className="text-zinc-400 text-lg">Scan and decode QR codes from images.</p>
             </div>
 
-            <div className="bg-white rounded-[2rem] border border-slate-200 p-8 md:p-12 shadow-xl">
+            <div className="bg-zinc-900/50 rounded-[2rem] border border-white/10 p-8 md:p-12 shadow-xl backdrop-blur-xl">
                 {!preview ? (
-                    <div className="py-16 text-center border-4 border-dashed border-slate-100 rounded-3xl mb-8">
-                        <div className="w-20 h-20 bg-amber-100 rounded-full mx-auto mb-6 flex items-center justify-center">
+                    <div className="py-16 text-center border-4 border-dashed border-white/10 rounded-3xl mb-8 bg-white/5">
+                        <div className="w-20 h-20 bg-amber-500/20 rounded-full mx-auto mb-6 flex items-center justify-center">
                             <QrCode size={32} className="text-amber-500" />
                         </div>
                         <button
@@ -120,25 +120,25 @@ export default function QRReader() {
                             Upload QR Code Image
                         </button>
                         <input type="file" ref={fileInputRef} onChange={handleFile} className="hidden" accept="image/*" />
-                        <p className="text-black mt-4 text-sm">Supports PNG, JPG, and other image formats</p>
+                        <p className="text-zinc-500 mt-4 text-sm">Supports PNG, JPG, and other image formats</p>
                     </div>
                 ) : (
                     <div className="space-y-6">
                         {/* Preview */}
-                        <div className="rounded-xl overflow-hidden bg-slate-100 p-4 max-h-[300px] flex items-center justify-center">
+                        <div className="rounded-xl overflow-hidden bg-zinc-800 p-4 max-h-[300px] flex items-center justify-center border border-white/10">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src={preview} alt="QR Code" className="max-w-full max-h-[280px] rounded-lg" />
                         </div>
 
                         {status === 'processing' && (
-                            <div className="flex items-center justify-center gap-3 text-slate-600">
+                            <div className="flex items-center justify-center gap-3 text-zinc-400">
                                 <Loader2 size={24} className="animate-spin" />
-                                <span className="font-bold text-black">Scanning...</span>
+                                <span className="font-bold text-white">Scanning...</span>
                             </div>
                         )}
 
                         {status === 'error' && (
-                            <div className="flex items-center gap-3 p-4 bg-rose-50 rounded-xl text-rose-600">
+                            <div className="flex items-center gap-3 p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-400">
                                 <AlertCircle size={20} />
                                 <span className="text-sm font-medium">{error}</span>
                             </div>
@@ -146,14 +146,14 @@ export default function QRReader() {
 
                         {status === 'success' && result && (
                             <div className="space-y-4">
-                                <label className="text-sm font-bold text-black">Decoded Content</label>
-                                <div className="flex items-center gap-4 p-4 bg-emerald-50 rounded-xl border border-emerald-200">
-                                    <p className="flex-grow text-black font-mono break-all">{result}</p>
+                                <label className="text-sm font-bold text-white">Decoded Content</label>
+                                <div className="flex items-center gap-4 p-4 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
+                                    <p className="flex-grow text-emerald-100 font-mono break-all">{result}</p>
                                     <div className="flex gap-2 flex-shrink-0">
                                         {isValidUrl(result) && (
                                             <button
                                                 onClick={openUrl}
-                                                className="p-3 hover:bg-emerald-100 rounded-lg transition-colors cursor-pointer"
+                                                className="p-3 hover:bg-emerald-500/20 rounded-lg transition-colors cursor-pointer"
                                                 title="Open URL"
                                             >
                                                 <Link size={20} className="text-emerald-600" />
@@ -161,9 +161,9 @@ export default function QRReader() {
                                         )}
                                         <button
                                             onClick={copyResult}
-                                            className="p-3 hover:bg-emerald-100 rounded-lg transition-colors cursor-pointer"
+                                            className="p-3 hover:bg-emerald-500/20 rounded-lg transition-colors cursor-pointer"
                                         >
-                                            {copied ? <Check size={20} className="text-emerald-500" /> : <Copy size={20} className="text-slate-600" />}
+                                            {copied ? <Check size={20} className="text-emerald-500" /> : <Copy size={20} className="text-emerald-100" />}
                                         </button>
                                     </div>
                                 </div>
@@ -179,7 +179,7 @@ export default function QRReader() {
                             </button>
                             <button
                                 onClick={reset}
-                                className="bg-slate-100 text-black px-8 py-4 rounded-xl font-bold hover:bg-slate-200 transition-all cursor-pointer"
+                                className="bg-zinc-800 text-white px-8 py-4 rounded-xl font-bold hover:bg-zinc-700 transition-all cursor-pointer"
                             >
                                 Clear
                             </button>

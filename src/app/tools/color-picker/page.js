@@ -75,11 +75,11 @@ export default function ColorPicker() {
     return (
         <div className="max-w-4xl mx-auto px-4 py-20">
             <div className="text-center mb-12">
-                <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">Color Picker</h1>
-                <p className="text-slate-500 text-lg">Pick colors from images or choose from the palette.</p>
+                <h1 className="text-4xl md:text-5xl font-black text-white mb-4">Color Picker</h1>
+                <p className="text-zinc-400 text-lg">Pick colors from images or choose from the palette.</p>
             </div>
 
-            <div className="bg-white rounded-[2rem] border border-slate-200 p-8 md:p-12 shadow-xl">
+            <div className="bg-zinc-900/50 rounded-[2rem] border border-white/10 p-8 md:p-12 shadow-xl backdrop-blur-xl">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Color Picker */}
                     <div className="space-y-6">
@@ -97,34 +97,34 @@ export default function ColorPicker() {
 
                     {/* Color Values */}
                     <div className="space-y-4">
-                        <div className="p-4 bg-slate-50 rounded-xl flex items-center justify-between">
+                        <div className="p-4 bg-zinc-800/50 rounded-xl flex items-center justify-between border border-white/10">
                             <div>
-                                <p className="text-xs text-slate-400 uppercase font-bold">HEX</p>
-                                <p className="font-mono font-bold text-slate-900">{color.toUpperCase()}</p>
+                                <p className="text-xs text-zinc-400 uppercase font-bold">HEX</p>
+                                <p className="font-mono font-bold text-white">{color.toUpperCase()}</p>
                             </div>
-                            <button onClick={() => copyToClipboard(color)} className="p-2 hover:bg-slate-200 rounded-lg transition-colors">
-                                {copied ? <Check size={20} className="text-emerald-500" /> : <Copy size={20} className="text-slate-400" />}
+                            <button onClick={() => copyToClipboard(color)} className="p-2 hover:bg-zinc-700/50 rounded-lg transition-colors">
+                                {copied ? <Check size={20} className="text-emerald-500" /> : <Copy size={20} className="text-zinc-400" />}
                             </button>
                         </div>
                         {rgb && (
-                            <div className="p-4 bg-slate-50 rounded-xl flex items-center justify-between">
+                            <div className="p-4 bg-zinc-800/50 rounded-xl flex items-center justify-between border border-white/10">
                                 <div>
-                                    <p className="text-xs text-slate-400 uppercase font-bold">RGB</p>
-                                    <p className="font-mono font-bold text-slate-900">rgb({rgb.r}, {rgb.g}, {rgb.b})</p>
+                                    <p className="text-xs text-zinc-400 uppercase font-bold">RGB</p>
+                                    <p className="font-mono font-bold text-white">rgb({rgb.r}, {rgb.g}, {rgb.b})</p>
                                 </div>
-                                <button onClick={() => copyToClipboard(`rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`)} className="p-2 hover:bg-slate-200 rounded-lg transition-colors">
-                                    <Copy size={20} className="text-slate-400" />
+                                <button onClick={() => copyToClipboard(`rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`)} className="p-2 hover:bg-zinc-700/50 rounded-lg transition-colors">
+                                    <Copy size={20} className="text-zinc-400" />
                                 </button>
                             </div>
                         )}
                         {hsl && (
-                            <div className="p-4 bg-slate-50 rounded-xl flex items-center justify-between">
+                            <div className="p-4 bg-zinc-800/50 rounded-xl flex items-center justify-between border border-white/10">
                                 <div>
-                                    <p className="text-xs text-slate-400 uppercase font-bold">HSL</p>
-                                    <p className="font-mono font-bold text-slate-900">hsl({hsl.h}, {hsl.s}%, {hsl.l}%)</p>
+                                    <p className="text-xs text-zinc-400 uppercase font-bold">HSL</p>
+                                    <p className="font-mono font-bold text-white">hsl({hsl.h}, {hsl.s}%, {hsl.l}%)</p>
                                 </div>
-                                <button onClick={() => copyToClipboard(`hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`)} className="p-2 hover:bg-slate-200 rounded-lg transition-colors">
-                                    <Copy size={20} className="text-slate-400" />
+                                <button onClick={() => copyToClipboard(`hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`)} className="p-2 hover:bg-zinc-700/50 rounded-lg transition-colors">
+                                    <Copy size={20} className="text-zinc-400" />
                                 </button>
                             </div>
                         )}
@@ -132,13 +132,13 @@ export default function ColorPicker() {
                 </div>
 
                 {/* Image Color Picker */}
-                <div className="mt-8 pt-8 border-t border-slate-100">
-                    <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <div className="mt-8 pt-8 border-t border-white/10">
+                    <h3 className="font-bold text-white mb-4 flex items-center gap-2">
                         <Pipette size={20} /> Pick from Image
                     </h3>
                     <button
                         onClick={() => fileInputRef.current?.click()}
-                        className="w-full py-4 border-2 border-dashed border-slate-200 rounded-xl text-slate-500 hover:border-pink-500 hover:text-pink-500 transition-all"
+                        className="w-full py-4 border-2 border-dashed border-white/10 rounded-xl text-zinc-400 hover:border-pink-500 hover:text-pink-400 transition-all bg-white/5 hover:bg-pink-500/5"
                     >
                         Upload an image to pick colors
                     </button>
@@ -152,7 +152,7 @@ export default function ColorPicker() {
 
                     {imageColors.length > 0 && (
                         <div className="mt-4">
-                            <p className="text-sm text-slate-500 mb-2">Recently picked:</p>
+                            <p className="text-sm text-zinc-400 mb-2">Recently picked:</p>
                             <div className="flex gap-2 flex-wrap">
                                 {imageColors.map((c, i) => (
                                     <button

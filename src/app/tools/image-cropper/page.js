@@ -175,14 +175,14 @@ export default function ImageCropper() {
     return (
         <div className="max-w-5xl mx-auto px-4 py-20">
             <div className="text-center mb-12">
-                <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">Image Cropper</h1>
-                <p className="text-slate-500 text-lg">Drag corners to crop your images - just like Canva!</p>
+                <h1 className="text-4xl md:text-5xl font-black text-white mb-4">Image Cropper</h1>
+                <p className="text-zinc-400 text-lg">Drag corners to crop your images - just like Canva!</p>
             </div>
 
-            <div className="bg-white rounded-[2rem] border border-slate-200 p-8 md:p-12 shadow-xl">
+            <div className="bg-zinc-900/50 rounded-[2rem] border border-white/10 p-8 md:p-12 shadow-xl backdrop-blur-xl">
                 {!file ? (
-                    <div className="py-20 text-center border-4 border-dashed border-slate-100 rounded-3xl">
-                        <div className="w-20 h-20 bg-orange-100 rounded-full mx-auto mb-6 flex items-center justify-center">
+                    <div className="py-20 text-center border-4 border-dashed border-white/10 rounded-3xl bg-white/5">
+                        <div className="w-20 h-20 bg-orange-500/20 rounded-full mx-auto mb-6 flex items-center justify-center">
                             <Crop size={32} className="text-orange-500" />
                         </div>
                         <button
@@ -192,13 +192,13 @@ export default function ImageCropper() {
                             Select Image
                         </button>
                         <input type="file" ref={fileInputRef} onChange={handleFile} className="hidden" accept="image/*" />
-                        <p className="text-slate-400 mt-4 text-sm">Upload an image and drag corners to crop</p>
+                        <p className="text-zinc-500 mt-4 text-sm">Upload an image and drag corners to crop</p>
                     </div>
                 ) : status === 'success' ? (
                     <div className="space-y-8">
                         <div className="text-center">
                             <p className="text-sm font-bold text-emerald-600 mb-4">✓ Cropped Successfully!</p>
-                            <div className="rounded-xl overflow-hidden bg-slate-100 p-4 inline-block">
+                            <div className="rounded-xl overflow-hidden bg-zinc-800 p-4 inline-block border border-white/10">
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img src={croppedUrl} alt="Cropped" className="max-w-full max-h-[400px] rounded-lg" />
                             </div>
@@ -207,8 +207,8 @@ export default function ImageCropper() {
                             <a href={croppedUrl} download="cropped-image" className="bg-emerald-600 text-white px-10 py-4 rounded-2xl font-bold text-lg hover:bg-emerald-700 flex items-center gap-3 cursor-pointer">
                                 <Download size={20} /> Download
                             </a>
-                            <button onClick={() => setStatus('idle')} className="bg-slate-100 text-slate-600 px-10 py-4 rounded-2xl font-bold cursor-pointer">Crop Again</button>
-                            <button onClick={() => { setFile(null); setStatus('idle'); }} className="bg-slate-100 text-slate-600 px-10 py-4 rounded-2xl font-bold cursor-pointer">New Image</button>
+                            <button onClick={() => setStatus('idle')} className="bg-zinc-800 text-zinc-300 px-10 py-4 rounded-2xl font-bold cursor-pointer hover:bg-zinc-700 transition">Crop Again</button>
+                            <button onClick={() => { setFile(null); setStatus('idle'); }} className="bg-zinc-800 text-zinc-300 px-10 py-4 rounded-2xl font-bold cursor-pointer hover:bg-zinc-700 transition">New Image</button>
                         </div>
                     </div>
                 ) : (
@@ -216,7 +216,7 @@ export default function ImageCropper() {
                         {/* Crop Preview Area */}
                         <div
                             ref={containerRef}
-                            className="relative bg-slate-900 rounded-xl overflow-hidden min-h-[400px] flex items-center justify-center"
+                            className="relative bg-zinc-900/50 rounded-xl overflow-hidden min-h-[400px] flex items-center justify-center border border-white/10"
                             style={{ cursor: isDragging ? 'grabbing' : 'default' }}
                         >
                             {/* Image */}
@@ -328,13 +328,13 @@ export default function ImageCropper() {
                         </div>
 
                         {/* Info & Controls */}
-                        <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-slate-50 rounded-xl">
-                            <div className="text-sm text-slate-600">
+                        <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-zinc-800/50 rounded-xl border border-white/5">
+                            <div className="text-sm text-zinc-400">
                                 <span className="font-bold">Size:</span> {Math.round((cropArea.width / 100) * imageSize.width)} × {Math.round((cropArea.height / 100) * imageSize.height)} px
                             </div>
                             <button
                                 onClick={resetCrop}
-                                className="flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-orange-600 cursor-pointer"
+                                className="flex items-center gap-2 text-sm font-bold text-zinc-400 hover:text-orange-400 cursor-pointer"
                             >
                                 <RotateCcw size={16} /> Reset
                             </button>
@@ -344,7 +344,7 @@ export default function ImageCropper() {
                             <button onClick={crop} className="bg-slate-900 text-white px-12 py-5 rounded-2xl font-bold text-xl hover:bg-orange-600 transition-all shadow-xl flex items-center gap-3 cursor-pointer">
                                 <Crop size={20} /> Crop Image
                             </button>
-                            <button onClick={() => setFile(null)} className="bg-slate-100 text-slate-600 px-8 py-5 rounded-2xl font-bold cursor-pointer">
+                            <button onClick={() => setFile(null)} className="bg-zinc-800 text-zinc-400 px-8 py-5 rounded-2xl font-bold cursor-pointer hover:bg-zinc-700 hover:text-white transition">
                                 <X size={20} />
                             </button>
                         </div>

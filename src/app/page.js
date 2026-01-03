@@ -131,7 +131,7 @@ const converterGroups = [
       { name: "Base64 Encoder", href: "/tools/base64", description: "Encode/decode Base64 strings", isNew: true },
       { name: "HTML Minifier", href: "/tools/html-minifier", description: "Minify HTML code", isNew: true },
       { name: "CSS Minifier", href: "/tools/css-minifier", description: "Minify CSS code", isNew: true },
-      { name: "Diff Checker", href: "/tools/diff-checker", description: "Compare text and code diffs", isNew: true }
+      { name: "Diff Checker", href: "/tools/diff-checker", description: "Compare text differences", isNew: true }
     ]
   },
   {

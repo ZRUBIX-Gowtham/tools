@@ -77,25 +77,25 @@ export default function QRGenerator() {
     return (
         <div className="max-w-5xl mx-auto px-4 py-20">
             <div className="text-center mb-12">
-                <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">QR Code Generator</h1>
-                <p className="text-black text-lg">Create beautiful QR codes with custom colors and templates.</p>
+                <h1 className="text-4xl md:text-5xl font-black text-white mb-4">QR Code Generator</h1>
+                <p className="text-zinc-400 text-lg">Create beautiful QR codes with custom colors and templates.</p>
             </div>
 
-            <div className="bg-white rounded-[2rem] border border-slate-200 p-8 md:p-12 shadow-xl">
+            <div className="bg-zinc-900/50 rounded-[2rem] border border-white/10 p-8 md:p-12 shadow-xl backdrop-blur-xl">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Input Section */}
                     <div className="space-y-6">
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-black">Content</label>
+                            <label className="text-sm font-bold text-zinc-300">Content</label>
                             <textarea
                                 value={text}
                                 onChange={(e) => setText(e.target.value)}
                                 placeholder="Enter URL or text..."
-                                className="w-full h-32 p-4 rounded-xl bg-slate-50 border-2 border-transparent focus:border-amber-500 outline-none resize-none text-black"
+                                className="w-full h-32 p-4 rounded-xl bg-zinc-800 border-2 border-transparent focus:border-amber-500 outline-none resize-none text-white placeholder-zinc-500"
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-black">Size: {size}px</label>
+                            <label className="text-sm font-bold text-zinc-300">Size: {size}px</label>
                             <input
                                 type="range"
                                 min="128"
@@ -103,22 +103,22 @@ export default function QRGenerator() {
                                 step="64"
                                 value={size}
                                 onChange={(e) => setSize(parseInt(e.target.value))}
-                                className="w-full h-2 bg-slate-200 rounded-lg cursor-pointer accent-amber-600"
+                                className="w-full h-2 bg-zinc-700 rounded-lg cursor-pointer accent-amber-600"
                             />
                         </div>
 
                         {/* Tab Navigation */}
-                        <div className="flex gap-2 p-1 bg-slate-100 rounded-xl">
+                        <div className="flex gap-2 p-1 bg-zinc-800 rounded-xl border border-white/5">
                             <button
                                 onClick={() => setActiveTab('templates')}
-                                className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-bold text-sm transition-all cursor-pointer ${activeTab === 'templates' ? 'bg-white text-black shadow-md' : 'text-slate-500 hover:text-black'
+                                className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-bold text-sm transition-all cursor-pointer ${activeTab === 'templates' ? 'bg-zinc-700 text-white shadow-md' : 'text-zinc-500 hover:text-white'
                                     }`}
                             >
                                 <Layout size={16} /> Templates
                             </button>
                             <button
                                 onClick={() => setActiveTab('custom')}
-                                className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-bold text-sm transition-all cursor-pointer ${activeTab === 'custom' ? 'bg-white text-black shadow-md' : 'text-slate-500 hover:text-black'
+                                className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-bold text-sm transition-all cursor-pointer ${activeTab === 'custom' ? 'bg-zinc-700 text-white shadow-md' : 'text-zinc-500 hover:text-white'
                                     }`}
                             >
                                 <Palette size={16} /> Custom Colors
@@ -128,15 +128,15 @@ export default function QRGenerator() {
                         {/* Templates Tab */}
                         {activeTab === 'templates' && (
                             <div className="space-y-3">
-                                <p className="text-xs text-slate-500 uppercase font-bold tracking-wide">Select a Template</p>
+                                <p className="text-xs text-zinc-500 uppercase font-bold tracking-wide">Select a Template</p>
                                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[280px] overflow-y-auto pr-2">
                                     {QR_TEMPLATES.map((template) => (
                                         <button
                                             key={template.name}
                                             onClick={() => applyTemplate(template)}
-                                            className={`p-3 rounded-xl border-2 transition-all cursor-pointer hover:scale-105 ${fgColor === template.fg && bgColor === template.bg
-                                                ? 'border-amber-500 ring-2 ring-amber-200'
-                                                : 'border-slate-200 hover:border-slate-300'
+                                            className={`p-3 rounded-xl border-2 transition-all cursor-pointer hover:border-amber-500/50 hover:bg-white/5 ${fgColor === template.fg && bgColor === template.bg
+                                                ? 'border-amber-500 ring-2 ring-amber-500/20'
+                                                : 'border-white/5'
                                                 }`}
                                         >
                                             <div
@@ -145,7 +145,7 @@ export default function QRGenerator() {
                                             >
                                                 <QrCode size={24} style={{ color: template.fg }} />
                                             </div>
-                                            <p className="text-xs font-bold text-black truncate">{template.name}</p>
+                                            <p className="text-xs font-bold text-zinc-300 truncate">{template.name}</p>
                                         </button>
                                     ))}
                                 </div>
@@ -157,19 +157,19 @@ export default function QRGenerator() {
                             <div className="space-y-4">
                                 {/* QR Color */}
                                 <div className="space-y-2">
-                                    <label className="text-sm font-bold text-black">QR Code Color</label>
+                                    <label className="text-sm font-bold text-zinc-300">QR Code Color</label>
                                     <div className="flex gap-2 items-center">
                                         <input
                                             type="color"
                                             value={fgColor}
                                             onChange={(e) => setFgColor(e.target.value)}
-                                            className="w-14 h-12 rounded-lg cursor-pointer border-2 border-slate-200"
+                                            className="w-14 h-12 rounded-lg cursor-pointer border-2 border-white/10 bg-transparent"
                                         />
                                         <input
                                             type="text"
                                             value={fgColor}
                                             onChange={(e) => setFgColor(e.target.value)}
-                                            className="flex-grow px-4 py-3 rounded-xl bg-slate-50 font-mono text-sm text-black uppercase"
+                                            className="flex-grow px-4 py-3 rounded-xl bg-zinc-800 font-mono text-sm text-white uppercase border border-white/5"
                                         />
                                     </div>
                                     <div className="flex gap-2 flex-wrap">
@@ -177,7 +177,7 @@ export default function QRGenerator() {
                                             <button
                                                 key={`fg-${color}`}
                                                 onClick={() => setFgColor(color)}
-                                                className={`w-8 h-8 rounded-lg border-2 transition-all hover:scale-110 cursor-pointer ${fgColor === color ? 'border-amber-500 ring-2 ring-amber-200' : 'border-slate-200'
+                                                className={`w-8 h-8 rounded-lg border-2 transition-all hover:scale-110 cursor-pointer ${fgColor === color ? 'border-amber-500 ring-2 ring-amber-500/20' : 'border-white/10'
                                                     }`}
                                                 style={{ backgroundColor: color }}
                                                 title={color}
@@ -188,19 +188,19 @@ export default function QRGenerator() {
 
                                 {/* Background Color */}
                                 <div className="space-y-2">
-                                    <label className="text-sm font-bold text-black">Background Color</label>
+                                    <label className="text-sm font-bold text-zinc-300">Background Color</label>
                                     <div className="flex gap-2 items-center">
                                         <input
                                             type="color"
                                             value={bgColor}
                                             onChange={(e) => setBgColor(e.target.value)}
-                                            className="w-14 h-12 rounded-lg cursor-pointer border-2 border-slate-200"
+                                            className="w-14 h-12 rounded-lg cursor-pointer border-2 border-white/10 bg-transparent"
                                         />
                                         <input
                                             type="text"
                                             value={bgColor}
                                             onChange={(e) => setBgColor(e.target.value)}
-                                            className="flex-grow px-4 py-3 rounded-xl bg-slate-50 font-mono text-sm text-black uppercase"
+                                            className="flex-grow px-4 py-3 rounded-xl bg-zinc-800 font-mono text-sm text-white uppercase border border-white/5"
                                         />
                                     </div>
                                     <div className="flex gap-2 flex-wrap">
@@ -208,7 +208,7 @@ export default function QRGenerator() {
                                             <button
                                                 key={`bg-${color}`}
                                                 onClick={() => setBgColor(color)}
-                                                className={`w-8 h-8 rounded-lg border-2 transition-all hover:scale-110 cursor-pointer ${bgColor === color ? 'border-amber-500 ring-2 ring-amber-200' : 'border-slate-200'
+                                                className={`w-8 h-8 rounded-lg border-2 transition-all hover:scale-110 cursor-pointer ${bgColor === color ? 'border-amber-500 ring-2 ring-amber-500/20' : 'border-white/10'
                                                     }`}
                                                 style={{ backgroundColor: color }}
                                                 title={color}
@@ -223,7 +223,7 @@ export default function QRGenerator() {
                     {/* Preview Section */}
                     <div className="flex flex-col items-center justify-center space-y-6">
                         <div
-                            className="p-6 rounded-2xl shadow-lg border border-slate-100 transition-all"
+                            className="p-6 rounded-2xl shadow-lg border border-white/10 transition-all"
                             style={{ backgroundColor: bgColor }}
                         >
                             {qrUrl && (
@@ -240,28 +240,28 @@ export default function QRGenerator() {
                         </div>
 
                         {/* Current Colors Display */}
-                        <div className="flex items-center gap-4 p-3 bg-slate-50 rounded-xl">
+                        <div className="flex items-center gap-4 p-3 bg-zinc-800/50 rounded-xl border border-white/10">
                             <div className="flex items-center gap-2">
-                                <div className="w-6 h-6 rounded-md border border-slate-200" style={{ backgroundColor: fgColor }} />
-                                <span className="text-xs font-mono text-black">{fgColor.toUpperCase()}</span>
+                                <div className="w-6 h-6 rounded-md border border-white/10" style={{ backgroundColor: fgColor }} />
+                                <span className="text-xs font-mono text-white">{fgColor.toUpperCase()}</span>
                             </div>
-                            <span className="text-slate-300">→</span>
+                            <span className="text-zinc-500">→</span>
                             <div className="flex items-center gap-2">
-                                <div className="w-6 h-6 rounded-md border border-slate-200" style={{ backgroundColor: bgColor }} />
-                                <span className="text-xs font-mono text-black">{bgColor.toUpperCase()}</span>
+                                <div className="w-6 h-6 rounded-md border border-white/10" style={{ backgroundColor: bgColor }} />
+                                <span className="text-xs font-mono text-white">{bgColor.toUpperCase()}</span>
                             </div>
                         </div>
 
                         <div className="flex gap-3 flex-wrap justify-center">
                             <button
                                 onClick={downloadQR}
-                                className="bg-slate-900 text-white px-8 py-4 rounded-xl font-bold hover:bg-amber-600 transition-all flex items-center gap-2 cursor-pointer"
+                                className="bg-zinc-800 text-white px-8 py-4 rounded-xl font-bold hover:bg-amber-600 transition-all flex items-center gap-2 cursor-pointer shadow-lg"
                             >
                                 <Download size={18} /> Download
                             </button>
                             <button
                                 onClick={copyToClipboard}
-                                className="bg-slate-100 text-black px-6 py-4 rounded-xl font-bold hover:bg-slate-200 transition-all flex items-center gap-2 cursor-pointer"
+                                className="bg-zinc-800 text-zinc-300 px-6 py-4 rounded-xl font-bold hover:bg-zinc-700 transition-all flex items-center gap-2 cursor-pointer"
                             >
                                 {copied ? <Check size={18} className="text-emerald-500" /> : <Copy size={18} />}
                                 {copied ? 'Copied!' : 'Copy URL'}

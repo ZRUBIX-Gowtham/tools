@@ -1,15 +1,15 @@
 "use client";
 import { useState, useRef } from 'react';
-import { FileImage, Download, X, Loader2, Upload, CheckCircle2 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Download, Upload, Sliders, ArrowRight } from 'lucide-react';
 
 export default function ImageCompressor() {
     const [file, setFile] = useState(null);
-    const [quality, setQuality] = useState(80);
-    const [status, setStatus] = useState('idle');
-    const [compressedUrl, setCompressedUrl] = useState(null);
+    const [preview, setPreview] = useState(null);
+    const [quality, setQuality] = useState(0.8);
     const [originalSize, setOriginalSize] = useState(0);
     const [compressedSize, setCompressedSize] = useState(0);
+    const [status, setStatus] = useState('idle');
+    const [compressedUrl, setCompressedUrl] = useState(null);
     const fileInputRef = useRef(null);
 
     const handleFile = (e) => {
@@ -17,173 +17,157 @@ export default function ImageCompressor() {
         if (selectedFile && selectedFile.type.startsWith('image/')) {
             setFile(selectedFile);
             setOriginalSize(selectedFile.size);
+            const url = URL.createObjectURL(selectedFile);
+            setPreview(url);
             setStatus('idle');
+            setCompressedUrl(null);
+            setCompressedSize(0);
         }
     };
 
-    const handleDrop = (e) => {
-        e.preventDefault();
-        const selectedFile = e.dataTransfer.files[0];
-        if (selectedFile && selectedFile.type.startsWith('image/')) {
-            setFile(selectedFile);
-            setOriginalSize(selectedFile.size);
-            setStatus('idle');
-        }
-    };
-
-    const compress = () => {
-        if (!file) return;
+    const compressImage = () => {
+        if (!file || !preview) return;
         setStatus('processing');
 
         const img = new Image();
-        const reader = new FileReader();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
 
-        reader.onload = (e) => {
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                canvas.width = img.width;
-                canvas.height = img.height;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0);
+            // Adjust format based on original file type if possible, or default to jpeg for compression
+            const format = file.type === 'image/png' ? 'image/jpeg' : file.type;
 
-                const dataUrl = canvas.toDataURL('image/jpeg', quality / 100);
-                setCompressedUrl(dataUrl);
+            const url = canvas.toDataURL(format, quality);
 
-                // Estimate compressed size
-                const base64Length = dataUrl.length - 'data:image/jpeg;base64,'.length;
-                setCompressedSize(Math.round(base64Length * 0.75));
+            // Calculate approximate size
+            const head = 'data:' + format + ';base64,';
+            const size = Math.round((url.length - head.length) * 3 / 4);
 
-                setStatus('success');
-            };
-            img.src = e.target.result;
+            setCompressedSize(size);
+            setCompressedUrl(url);
+            setStatus('success');
         };
-        reader.readAsDataURL(file);
+        img.src = preview;
+    };
+
+    const formatSize = (bytes) => {
+        if (bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    };
+
+    const reset = () => {
+        setFile(null);
+        setPreview(null);
+        setCompressedUrl(null);
+        setStatus('idle');
     };
 
     return (
-        <div className="max-w-4xl mx-auto px-4 py-20 relative z-10">
+        <div className="max-w-5xl mx-auto px-4 py-20">
             <div className="text-center mb-12">
-                <motion.h1
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight"
-                >
-                    Image Compressor
-                </motion.h1>
-                <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    className="text-slate-400 text-lg font-light"
-                >
-                    Reduce image file size while maintaining quality. Local browser-based compression.
-                </motion.p>
+                <h1 className="text-4xl md:text-5xl font-black text-white mb-4">Image Compressor</h1>
+                <p className="text-zinc-400 text-lg">Reduce image file size while maintaining quality.</p>
             </div>
 
-            <div
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={handleDrop}
-                className={`relative group rounded-[2rem] border-2 border-dashed transition-all duration-300 ${file ? 'border-orange-500/50 bg-orange-500/5' : 'border-slate-800 bg-white/5 hover:border-orange-400 hover:bg-white/10'
-                    } p-12 text-center backdrop-blur-sm`}
-            >
-                <AnimatePresence mode="wait">
-                    {!file ? (
-                        <motion.div
-                            key="idle"
-                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                            className="space-y-6"
+            <div className="bg-zinc-900/50 rounded-[2rem] border border-white/10 p-8 md:p-12 shadow-xl backdrop-blur-xl">
+                {!file ? (
+                    <div className="py-20 text-center border-4 border-dashed border-white/10 rounded-3xl bg-white/5">
+                        <div className="w-20 h-20 bg-green-500/20 rounded-full mx-auto mb-6 flex items-center justify-center">
+                            <Upload size={32} className="text-green-500" />
+                        </div>
+                        <button
+                            onClick={() => fileInputRef.current?.click()}
+                            className="bg-green-600 text-white px-10 py-4 rounded-2xl font-bold text-lg hover:bg-green-500 transition-all shadow-xl cursor-pointer"
                         >
-                            <div className="w-20 h-20 bg-orange-500/20 text-orange-400 rounded-3xl mx-auto flex items-center justify-center animate-float">
-                                <Upload size={32} />
+                            Select Image
+                        </button>
+                        <input type="file" ref={fileInputRef} onChange={handleFile} className="hidden" accept="image/*" />
+                        <p className="text-zinc-500 mt-4 text-sm">Supports all standard image formats</p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                        {/* Image Preview */}
+                        <div className="space-y-4">
+                            <div className="bg-zinc-800/50 rounded-xl p-4 border border-white/10 flex items-center justify-center min-h-[300px]">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={status === 'success' ? compressedUrl : preview} alt="Preview" className="max-w-full max-h-[400px] rounded-lg" />
                             </div>
-                            <div>
-                                <button
-                                    onClick={() => fileInputRef.current?.click()}
-                                    className="bg-orange-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-orange-500 transition-all shadow-lg hover:shadow-orange-600/20 active:scale-95 mb-4"
-                                >
-                                    Select Image
-                                </button>
-                                <p className="text-slate-500 text-sm">or drag and drop your image here</p>
-                            </div>
-                            <input type="file" ref={fileInputRef} onChange={handleFile} className="hidden" accept="image/*" />
-                        </motion.div>
-                    ) : (
-                        <motion.div
-                            key="file-selected"
-                            initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
-                            className="space-y-8"
-                        >
-                            <div className="flex items-center justify-between gap-4 bg-white/5 p-4 rounded-xl border border-white/10">
-                                <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-orange-500/20 rounded-lg flex items-center justify-center text-orange-400">
-                                        <FileImage size={24} />
-                                    </div>
-                                    <div className="text-left">
-                                        <p className="font-bold text-slate-200 truncate max-w-[200px]">{file.name}</p>
-                                        <p className="text-xs text-slate-500">Original: {(originalSize / 1024).toFixed(1)} KB</p>
-                                    </div>
-                                </div>
-                                <button onClick={() => { setFile(null); setStatus('idle'); }} className="text-slate-500 hover:text-orange-500 transition-colors bg-white/5 p-2 rounded-lg">
-                                    <X size={16} />
-                                </button>
-                            </div>
-
-                            <div className="p-6 bg-white/5 rounded-xl border border-white/10 space-y-4">
-                                <div className="flex justify-between items-center text-sm font-bold text-slate-300">
-                                    <span>Compression Quality</span>
-                                    <span>{quality}%</span>
-                                </div>
-                                <input
-                                    type="range"
-                                    min="10"
-                                    max="100"
-                                    value={quality}
-                                    onChange={(e) => setQuality(parseInt(e.target.value))}
-                                    className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-orange-500"
-                                />
-                                <div className="flex justify-between text-xs text-slate-500">
-                                    <span>Smaller file</span>
-                                    <span>Higher quality</span>
-                                </div>
-                            </div>
-
-                            {status === 'success' && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                                    className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-center"
-                                >
-                                    <p className="text-emerald-400 font-bold text-lg flex items-center justify-center gap-2">
-                                        <CheckCircle2 size={20} />
-                                        Compressed: {(compressedSize / 1024).toFixed(1)} KB
-                                    </p>
-                                    <p className="text-emerald-500/80 text-sm mt-1">
-                                        Reduced by {Math.round((1 - compressedSize / originalSize) * 100)}%
-                                    </p>
-                                </motion.div>
-                            )}
-
-                            <div className="flex justify-center gap-4">
-                                {status === 'success' ? (
-                                    <>
-                                        <a href={compressedUrl} download="compressed-image.jpg" className="bg-emerald-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-emerald-500 transition-all shadow-lg flex items-center gap-2">
-                                            <Download size={20} /> Download
-                                        </a>
-                                        <button onClick={() => setStatus('idle')} className="bg-white/5 text-slate-300 px-8 py-4 rounded-2xl font-bold hover:bg-white/10 hover:text-white transition-all border border-white/5">Adjust</button>
-                                    </>
-                                ) : status === 'processing' ? (
-                                    <div className="flex items-center gap-3 text-slate-400">
-                                        <Loader2 size={24} className="animate-spin text-orange-500" />
-                                        <span className="font-bold">Compressing...</span>
-                                    </div>
-                                ) : (
-                                    <button onClick={compress} className="bg-white text-slate-900 px-10 py-4 rounded-2xl font-bold text-lg hover:bg-orange-50 hover:text-orange-600 transition-all shadow-xl active:scale-95">
-                                        Compress Image
-                                    </button>
+                            <div className="flex justify-between text-sm font-medium">
+                                <span className="text-zinc-400">Original: <span className="text-white">{formatSize(originalSize)}</span></span>
+                                {status === 'success' && (
+                                    <span className="text-green-400">Compressed: <span className="text-white">{formatSize(compressedSize)}</span> (-{Math.round((1 - compressedSize / originalSize) * 100)}%)</span>
                                 )}
                             </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+                        </div>
+
+                        {/* Controls */}
+                        <div className="space-y-8 bg-zinc-800/30 p-8 rounded-2xl border border-white/5">
+                            <div>
+                                <label className="flex items-center justify-between text-zinc-300 font-bold mb-4">
+                                    <span className="flex items-center gap-2"><Sliders size={18} /> Compression Level</span>
+                                    <span className="text-green-400">{Math.round(quality * 100)}%</span>
+                                </label>
+                                <input
+                                    type="range"
+                                    min="0.1"
+                                    max="1"
+                                    step="0.05"
+                                    value={quality}
+                                    onChange={(e) => {
+                                        setQuality(parseFloat(e.target.value));
+                                        if (status === 'success') setStatus('idle'); // Reset if changed
+                                    }}
+                                    className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-green-500"
+                                />
+                                <div className="flex justify-between text-xs text-zinc-500 mt-2">
+                                    <span>Lower Quality (Smaller)</span>
+                                    <span>Higher Quality (Larger)</span>
+                                </div>
+                            </div>
+
+                            <div className="space-y-4 pt-4 border-t border-white/10">
+                                {status === 'success' ? (
+                                    <>
+                                        <a
+                                            href={compressedUrl}
+                                            download={`compressed-${file.name}`}
+                                            className="bg-green-500 text-white w-full py-4 rounded-xl font-bold text-lg hover:bg-green-400 flex items-center justify-center gap-2 cursor-pointer transition-all shadow-lg hover:shadow-green-500/20"
+                                        >
+                                            <Download size={20} /> Download Compressed
+                                        </a>
+                                        <button
+                                            onClick={compressImage}
+                                            className="bg-zinc-800 text-white w-full py-4 rounded-xl font-bold hover:bg-zinc-700 cursor-pointer transition-all"
+                                        >
+                                            Re-Compress
+                                        </button>
+                                    </>
+                                ) : (
+                                    <button
+                                        onClick={compressImage}
+                                        className="bg-green-600 text-white w-full py-4 rounded-xl font-bold text-lg hover:bg-green-500 cursor-pointer transition-all shadow-lg hover:shadow-green-500/20 flex items-center justify-center gap-2"
+                                    >
+                                        {status === 'processing' ? 'Compressing...' : 'Compress Image'}
+                                        {!status.includes('process') && <ArrowRight size={20} />}
+                                    </button>
+                                )}
+
+                                <button
+                                    onClick={reset}
+                                    className="w-full text-zinc-500 hover:text-white transition-colors text-sm font-medium py-2"
+                                >
+                                    Start Over
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

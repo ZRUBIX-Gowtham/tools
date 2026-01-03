@@ -126,14 +126,14 @@ export default function VideoSpeedChanger() {
     return (
         <div className="max-w-4xl mx-auto px-4 py-20">
             <div className="text-center mb-12">
-                <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">Video Speed Changer</h1>
-                <p className="text-black text-lg">Speed up or slow down your videos. Create fast-motion or slow-motion effects.</p>
+                <h1 className="text-4xl md:text-5xl font-black text-white mb-4">Video Speed Changer</h1>
+                <p className="text-zinc-400 text-lg">Speed up or slow down your videos. Create fast-motion or slow-motion effects.</p>
             </div>
 
-            <div className="bg-white rounded-[2rem] border border-slate-200 p-8 md:p-12 shadow-xl">
+            <div className="bg-zinc-900/50 rounded-[2rem] border border-white/10 p-8 md:p-12 shadow-xl backdrop-blur-xl">
                 {!file ? (
-                    <div className="py-20 text-center border-4 border-dashed border-slate-100 rounded-3xl">
-                        <div className="w-20 h-20 bg-indigo-100 rounded-full mx-auto mb-6 flex items-center justify-center">
+                    <div className="py-20 text-center border-4 border-dashed border-white/10 rounded-3xl bg-white/5">
+                        <div className="w-20 h-20 bg-indigo-500/20 rounded-full mx-auto mb-6 flex items-center justify-center">
                             <FastForward size={32} className="text-indigo-500" />
                         </div>
                         <button
@@ -143,13 +143,13 @@ export default function VideoSpeedChanger() {
                             Select Video File
                         </button>
                         <input type="file" ref={fileInputRef} onChange={handleFile} className="hidden" accept="video/*" />
-                        <p className="text-slate-400 mt-4 text-sm">Supports MP4, WebM, MOV and more</p>
-                        <p className="text-slate-400 mt-2 text-xs">Change video playback speed from 0.25x to 4x</p>
+                        <p className="text-zinc-500 mt-4 text-sm">Supports MP4, WebM, MOV and more</p>
+                        <p className="text-zinc-600 mt-2 text-xs">Change video playback speed from 0.25x to 4x</p>
                     </div>
                 ) : (
                     <div className="space-y-8">
                         {/* Video Preview */}
-                        <div className="rounded-xl overflow-hidden bg-slate-900">
+                        <div className="rounded-xl overflow-hidden bg-black/50 border border-white/10">
                             <video
                                 ref={videoRef}
                                 src={videoPreview}
@@ -160,7 +160,7 @@ export default function VideoSpeedChanger() {
 
                         {/* Speed Selection */}
                         <div className="space-y-4">
-                            <label className="text-sm font-bold text-black flex items-center gap-2">
+                            <label className="text-sm font-bold text-zinc-300 flex items-center gap-2">
                                 <Gauge size={16} className="text-indigo-500" /> Select Speed
                             </label>
                             <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
@@ -169,28 +169,28 @@ export default function VideoSpeedChanger() {
                                         key={option.value}
                                         onClick={() => setSpeed(option.value)}
                                         className={`p-3 rounded-xl border-2 transition-all cursor-pointer ${speed === option.value
-                                                ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
-                                                : 'border-slate-200 hover:border-indigo-300 text-black'
+                                            ? 'border-indigo-500 bg-indigo-500/20 text-white'
+                                            : 'border-white/10 hover:border-indigo-500/50 text-zinc-400 hover:text-white bg-white/5'
                                             }`}
                                     >
                                         <div className="font-bold text-lg">{option.label}</div>
-                                        <div className="text-xs text-slate-500">{option.desc}</div>
+                                        <div className="text-xs text-zinc-500 group-hover:text-zinc-400">{option.desc}</div>
                                     </button>
                                 ))}
                             </div>
                         </div>
 
                         {/* Speed Info */}
-                        <div className="bg-indigo-50 p-4 rounded-xl text-center">
+                        <div className="bg-indigo-500/10 border border-indigo-500/20 p-4 rounded-xl text-center">
                             <div className="flex items-center justify-center gap-2 mb-2">
-                                <Zap size={20} className="text-indigo-600" />
-                                <span className="font-bold text-indigo-700 text-lg">{speed}x Speed</span>
+                                <Zap size={20} className="text-indigo-400" />
+                                <span className="font-bold text-indigo-300 text-lg">{speed}x Speed</span>
                             </div>
-                            <p className="text-sm text-indigo-600">{getSpeedDescription()}</p>
+                            <p className="text-sm text-indigo-400">{getSpeedDescription()}</p>
                         </div>
 
                         {status === 'error' && (
-                            <div className="flex items-center gap-3 p-4 bg-rose-50 rounded-xl text-rose-600">
+                            <div className="flex items-center gap-3 p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-400">
                                 <AlertCircle size={20} />
                                 <span className="text-sm font-medium">{error}</span>
                             </div>
@@ -198,20 +198,20 @@ export default function VideoSpeedChanger() {
 
                         {status === 'processing' && (
                             <div className="space-y-2">
-                                <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
+                                <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
                                     <div
-                                        className="h-full bg-indigo-600 transition-all duration-300"
+                                        className="h-full bg-indigo-500 transition-all duration-300"
                                         style={{ width: `${progress}%` }}
                                     />
                                 </div>
-                                <p className="text-sm text-black text-center">Processing at {speed}x speed... {Math.round(progress)}%</p>
+                                <p className="text-sm text-zinc-300 text-center">Processing at {speed}x speed... {Math.round(progress)}%</p>
                             </div>
                         )}
 
                         {status === 'success' && processedUrl && (
                             <div className="space-y-4">
-                                <p className="text-sm font-bold text-black text-center">Processed Video ({speed}x speed)</p>
-                                <div className="rounded-xl overflow-hidden bg-slate-900">
+                                <p className="text-sm font-bold text-zinc-300 text-center">Processed Video ({speed}x speed)</p>
+                                <div className="rounded-xl overflow-hidden bg-black/50 border border-white/10">
                                     <video src={processedUrl} controls className="w-full max-h-[300px]" />
                                 </div>
                             </div>
@@ -227,19 +227,19 @@ export default function VideoSpeedChanger() {
                                     >
                                         <Download size={20} /> Download Video
                                     </a>
-                                    <button onClick={() => { setProcessedUrl(null); setStatus('idle'); }} className="bg-slate-100 text-black px-10 py-4 rounded-2xl font-bold cursor-pointer">Change Speed Again</button>
+                                    <button onClick={() => { setProcessedUrl(null); setStatus('idle'); }} className="bg-zinc-800 text-white px-10 py-4 rounded-2xl font-bold cursor-pointer hover:bg-zinc-700 transition">Change Speed Again</button>
                                 </>
                             ) : status === 'processing' ? (
-                                <div className="flex items-center gap-3 text-black">
+                                <div className="flex items-center gap-3 text-white">
                                     <Loader2 size={24} className="animate-spin" />
                                     <span className="font-bold">Processing video...</span>
                                 </div>
                             ) : (
                                 <>
-                                    <button onClick={changeSpeed} className="bg-slate-900 text-white px-12 py-5 rounded-2xl font-bold text-xl hover:bg-indigo-600 transition-all shadow-xl flex items-center gap-3 cursor-pointer">
+                                    <button onClick={changeSpeed} className="bg-white text-zinc-900 px-12 py-5 rounded-2xl font-bold text-xl hover:bg-indigo-500 hover:text-white transition-all shadow-xl flex items-center gap-3 cursor-pointer">
                                         <Zap size={20} /> Apply {speed}x Speed
                                     </button>
-                                    <button onClick={() => { setFile(null); setVideoPreview(null); }} className="bg-slate-100 text-black px-8 py-5 rounded-2xl font-bold cursor-pointer">
+                                    <button onClick={() => { setFile(null); setVideoPreview(null); }} className="bg-zinc-800 text-white px-8 py-5 rounded-2xl font-bold cursor-pointer hover:bg-zinc-700 transition">
                                         <X size={20} />
                                     </button>
                                 </>
