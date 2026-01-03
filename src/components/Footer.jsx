@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Twitter, Github, Linkedin, Facebook, Heart, Sparkles, ShieldCheck, Zap } from 'lucide-react';
+import { Twitter, Github, Linkedin, Facebook, Heart } from 'lucide-react';
 import Logo from './Logo';
 
 export default function Footer() {
@@ -12,15 +12,8 @@ export default function Footer() {
                 { name: 'PNG to JPG', href: '/convert/png-to-jpg' },
                 { name: 'PNG to WebP', href: '/convert/png-to-webp' },
                 { name: 'PNG to SVG', href: '/convert/png-to-svg' },
-                { name: 'PNG to PDF', href: '/convert/png-to-pdf' }
-            ]
-        },
-        {
-            title: 'JPEG Tools',
-            links: [
-                { name: 'JPEG to WebP', href: '/convert/jpeg-to-webp' },
-                { name: 'JPEG to PDF', href: '/convert/jpeg-to-pdf' },
-                { name: 'JPEG to PNG', href: '/convert/jpeg-to-png' },
+                { name: 'PNG to PDF', href: '/convert/png-to-pdf' },
+                { name: 'PNG to ICO', href: '/convert/png-to-ico' },
             ]
         },
         {
@@ -28,15 +21,23 @@ export default function Footer() {
             links: [
                 { name: 'JPG to PNG', href: '/convert/jpg-to-png' },
                 { name: 'JPG to WebP', href: '/convert/jpg-to-webp' },
+                { name: 'JPG to PDF', href: '/convert/jpg-to-pdf' },
+            ]
+        },
+        {
+            title: 'JPEG Tools',
+            links: [
+                { name: 'JPEG to PNG', href: '/convert/jpeg-to-png' },
+                { name: 'JPEG to WebP', href: '/convert/jpeg-to-webp' },
+                { name: 'JPEG to PDF', href: '/convert/jpeg-to-pdf' },
             ]
         },
         {
             title: 'WebP Tools',
             links: [
                 { name: 'WebP to PNG', href: '/convert/webp-to-png' },
-                { name: 'WebP to JPEG', href: '/convert/webp-to-jpeg' },
                 { name: 'WebP to JPG', href: '/convert/webp-to-jpg' },
-                { name: 'WebP to SVG', href: '/convert/webp-to-svg' }
+                { name: 'WebP to SVG', href: '/convert/webp-to-svg' },
             ]
         },
         {
@@ -44,23 +45,65 @@ export default function Footer() {
             links: [
                 { name: 'SVG to PNG', href: '/convert/svg-to-png' },
                 { name: 'SVG to JPG', href: '/convert/svg-to-jpg' },
+                { name: 'SVG to PDF', href: '/convert/svg-to-pdf' },
                 { name: 'Any to SVG', href: '/convert/any-to-svg' },
             ]
         },
         {
-            title: 'More Tools',
+            title: 'Image Editing',
             links: [
-                { name: 'GIF to MP4', href: '/convert/gif-to-mp4' },
+                { name: 'Image Compressor', href: '/tools/image-compressor' },
                 { name: 'Image Resizer', href: '/tools/resizer' },
+                { name: 'Image Cropper', href: '/tools/image-cropper' },
+                { name: 'Background Remover', href: '/tools/background-remover' },
+                { name: 'Color Picker', href: '/tools/color-picker' },
+            ]
+        },
+        {
+            title: 'Video Tools',
+            links: [
+                { name: 'Video Compressor', href: '/tools/video-compressor' },
+                { name: 'Video Enhancer', href: '/tools/video-enhancer' },
+                { name: 'Video Speed', href: '/tools/video-speed' },
+                { name: 'GIF to MP4', href: '/convert/gif-to-mp4' },
+                { name: 'MP4 to GIF', href: '/convert/mp4-to-gif' },
+            ]
+        },
+        {
+            title: 'PDF Tools',
+            links: [
                 { name: 'PDF Compressor', href: '/tools/pdf-compressor' },
-                { name: 'QR Generator', href: '/tools/qr-generator' }
+                { name: 'PDF Merger', href: '/tools/pdf-merger' },
+                { name: 'PDF to JPG', href: '/convert/pdf-to-jpg' },
+                { name: 'PDF to PNG', href: '/convert/pdf-to-png' },
+            ]
+        },
+        {
+            title: 'Code Tools',
+            links: [
+                { name: 'JSON Formatter', href: '/tools/json-formatter' },
+                { name: 'Diff Checker', href: '/tools/diff-checker' },
+                { name: 'HTML Minifier', href: '/tools/html-minifier' },
+                { name: 'CSS Minifier', href: '/tools/css-minifier' },
+                { name: 'Base64 Encoder', href: '/tools/base64' },
+            ]
+        },
+        {
+            title: 'Text & Utils',
+            links: [
+                { name: 'Word Counter', href: '/tools/word-counter' },
+                { name: 'Case Converter', href: '/tools/case-converter' },
+                { name: 'Lorem Ipsum', href: '/tools/lorem-ipsum' },
+                { name: 'QR Generator', href: '/tools/qr-generator' },
+                { name: 'Barcode Gen', href: '/tools/barcode-generator' },
             ]
         },
         {
             title: 'Company',
             links: [
                 { name: 'Privacy Policy', href: '/privacy-policy' },
-                { name: 'Terms', href: '/terms' }
+                { name: 'Terms of Service', href: '/terms' },
+                { name: 'Contact Us', href: '/contact' }
             ]
         }
     ];
@@ -73,7 +116,7 @@ export default function Footer() {
                         <div className="flex items-center gap-2">
                             <Logo />
                         </div>
-                        <p className="text-zinc-400 max-w-sm leading-relaxed text-sm font-medium">
+                        <p className="text-zinc-500 max-w-sm leading-relaxed text-sm font-medium">
                             Professional file conversion suite running locally in your browser.
                             Secure, fast, and free forever.
                         </p>
@@ -86,14 +129,14 @@ export default function Footer() {
                         </div>
                     </div>
 
-                    <div className="w-full lg:w-3/4 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-x-8 gap-y-12">
+                    <div className="w-full lg:w-3/4 grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-x-8 gap-y-12">
                         {footerSections.map((section) => (
                             <div key={section.title} className="space-y-6">
-                                <h3 className="text-white font-bold text-sm uppercase tracking-wider">{section.title}</h3>
+                                <h3 className="text-white font-bold text-xs uppercase tracking-widest">{section.title}</h3>
                                 <ul className="space-y-3">
                                     {section.links.map((link) => (
                                         <li key={link.name}>
-                                            <Link href={link.href} className="text-zinc-500 hover:text-white transition-colors text-sm font-medium hover:pl-1 block">
+                                            <Link href={link.href} className="text-zinc-500 hover:text-blue-400 transition-colors text-sm font-medium hover:pl-1 block">
                                                 {link.name}
                                             </Link>
                                         </li>
@@ -105,17 +148,16 @@ export default function Footer() {
                 </div>
 
                 <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <p className="text-zinc-500 text-xs font-semibold uppercase tracking-wider">
+                    <p className="text-zinc-600 text-xs font-semibold uppercase tracking-wider">
                         © {years} ToolsHub. All rights reserved.
                     </p>
 
-                    <div className="flex items-center gap-6">
-                        <div className="flex items-center gap-2 text-zinc-500 text-xs font-bold uppercase tracking-wider">
-                            <ShieldCheck size={14} className="text-emerald-500" /> Secure
-                        </div>
-                        <div className="flex items-center gap-2 text-zinc-500 text-xs font-bold uppercase tracking-wider">
-                            <Zap size={14} className="text-blue-500" /> Fast
-                        </div>
+                    <p className="text-zinc-500 text-xs font-bold uppercase tracking-wider">
+                        Developed by Zrubix Solutions Pvt Ltd
+                    </p>
+
+                    <div className="flex items-center gap-2 text-zinc-500 text-xs font-bold uppercase tracking-wider">
+                        Made by <Heart size={14} className="text-rose-500 fill-rose-500" /> Gowtham
                     </div>
                 </div>
             </div>

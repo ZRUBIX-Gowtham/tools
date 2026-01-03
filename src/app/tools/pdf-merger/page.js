@@ -1,7 +1,8 @@
 "use client";
 import { useState, useRef } from 'react';
-import { FileText, Download, X, Loader2, Plus, AlertCircle, GripVertical } from 'lucide-react';
+import { FileText, Download, X, Loader2, Plus, AlertCircle, GripVertical, Upload, CheckCircle2 } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function PDFMerger() {
     const [files, setFiles] = useState([]);
@@ -14,6 +15,13 @@ export default function PDFMerger() {
 
     const handleFiles = (e) => {
         const selectedFiles = Array.from(e.target.files).filter(f => f.type === 'application/pdf');
+        setFiles(prev => [...prev, ...selectedFiles]);
+        setError(null);
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        const selectedFiles = Array.from(e.dataTransfer.files).filter(f => f.type === 'application/pdf');
         setFiles(prev => [...prev, ...selectedFiles]);
         setError(null);
     };
@@ -72,108 +80,147 @@ export default function PDFMerger() {
     };
 
     return (
-        <div className="max-w-4xl mx-auto px-4 py-20">
+        <div className="max-w-4xl mx-auto px-4 py-20 relative z-10">
             <div className="text-center mb-12">
-                <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">PDF Merger</h1>
-                <p className="text-slate-500 text-lg">Combine multiple PDF files into one document.</p>
+                <motion.h1
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight"
+                >
+                    PDF Merger
+                </motion.h1>
+                <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                    className="text-slate-400 text-lg font-light"
+                >
+                    Combine multiple PDF files into one document. Drag and drop to reorder.
+                </motion.p>
             </div>
 
-            <div className="bg-white rounded-[2rem] border border-slate-200 p-8 md:p-12 shadow-xl">
-                {files.length === 0 ? (
-                    <div className="py-20 text-center border-4 border-dashed border-slate-100 rounded-3xl">
-                        <div className="w-20 h-20 bg-red-100 rounded-full mx-auto mb-6 flex items-center justify-center">
-                            <FileText size={32} className="text-red-500" />
-                        </div>
-                        <button
-                            onClick={() => fileInputRef.current?.click()}
-                            className="bg-red-600 text-white px-10 py-4 rounded-2xl font-bold text-lg hover:bg-red-700 transition-all shadow-xl cursor-pointer"
+            <div
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={handleDrop}
+                className={`relative group rounded-[2rem] border-2 border-dashed transition-all duration-300 ${files.length === 0 ? 'border-red-500/50 bg-red-500/5' : 'border-slate-800 bg-white/5'
+                    } p-8 md:p-12 shadow-2xl backdrop-blur-sm`}
+            >
+                <AnimatePresence mode="wait">
+                    {files.length === 0 ? (
+                        <motion.div
+                            key="idle"
+                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                            className="py-12 text-center"
                         >
-                            Select PDF Files
-                        </button>
-                        <input type="file" ref={fileInputRef} onChange={handleFiles} className="hidden" accept=".pdf" multiple />
-                        <p className="text-slate-400 mt-4 text-sm">Select multiple PDF files to merge</p>
-                    </div>
-                ) : (
-                    <div className="space-y-8">
-                        <p className="text-sm text-slate-500 text-center">Drag to reorder files</p>
-                        <div className="space-y-3 max-h-60 overflow-y-auto">
-                            {files.map((file, idx) => (
-                                <div
-                                    key={idx}
-                                    draggable
-                                    onDragStart={() => handleDragStart(idx)}
-                                    onDragOver={(e) => handleDragOver(e, idx)}
-                                    onDragEnd={handleDragEnd}
-                                    className={`flex items-center gap-4 p-4 bg-slate-50 rounded-xl cursor-move transition-all ${draggedIndex === idx ? 'opacity-50 scale-95' : ''}`}
-                                >
-                                    <GripVertical size={18} className="text-slate-400" />
-                                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                                        <FileText size={20} className="text-red-600" />
-                                    </div>
-                                    <div className="flex-grow">
-                                        <p className="font-bold text-slate-900 truncate">{file.name}</p>
-                                        <p className="text-xs text-slate-400">{(file.size / 1024).toFixed(1)} KB</p>
-                                    </div>
-                                    <span className="text-xs font-bold text-slate-400 bg-slate-200 px-2 py-1 rounded">#{idx + 1}</span>
-                                    <button onClick={() => removeFile(idx)} className="text-slate-400 hover:text-rose-500 cursor-pointer">
-                                        <X size={18} />
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-
-                        <button
-                            onClick={() => fileInputRef.current?.click()}
-                            className="w-full py-4 border-2 border-dashed border-slate-200 rounded-xl text-slate-500 hover:border-red-500 hover:text-red-500 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                            <div className="w-20 h-20 bg-red-500/20 text-red-500 rounded-3xl mx-auto flex items-center justify-center animate-float mb-6">
+                                <Upload size={32} />
+                            </div>
+                            <button
+                                onClick={() => fileInputRef.current?.click()}
+                                className="bg-red-600 text-white px-10 py-4 rounded-2xl font-bold text-lg hover:bg-red-500 transition-all shadow-lg hover:shadow-red-600/20 active:scale-95 mb-4"
+                            >
+                                Select PDF Files
+                            </button>
+                            <input type="file" ref={fileInputRef} onChange={handleFiles} className="hidden" accept=".pdf" multiple />
+                            <p className="text-slate-500 text-sm">Select multiple PDF files to merge</p>
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            key="files-selected"
+                            initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
+                            className="space-y-8"
                         >
-                            <Plus size={20} /> Add More PDFs
-                        </button>
-                        <input type="file" ref={fileInputRef} onChange={handleFiles} className="hidden" accept=".pdf" multiple />
-
-                        {status === 'error' && (
-                            <div className="flex items-center gap-3 p-4 bg-rose-50 rounded-xl text-rose-600">
-                                <AlertCircle size={20} />
-                                <span className="text-sm font-medium">{error}</span>
+                            <p className="text-sm text-slate-400 text-center uppercase tracking-wider font-bold">Drag to reorder files</p>
+                            <div className="space-y-3 max-h-80 overflow-y-auto custom-scrollbar pr-2">
+                                {files.map((file, idx) => (
+                                    <motion.div
+                                        key={idx}
+                                        layout
+                                        draggable
+                                        onDragStart={() => handleDragStart(idx)}
+                                        onDragOver={(e) => handleDragOver(e, idx)}
+                                        onDragEnd={handleDragEnd}
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0, scale: draggedIndex === idx ? 0.98 : 1 }}
+                                        className={`flex items-center gap-4 p-4 rounded-xl cursor-move transition-all border border-white/5 ${draggedIndex === idx ? 'bg-red-500/10 border-red-500/30' : 'bg-white/5 hover:bg-white/10'}`}
+                                    >
+                                        <GripVertical size={18} className="text-slate-600" />
+                                        <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center text-red-500">
+                                            <FileText size={20} />
+                                        </div>
+                                        <div className="flex-grow min-w-0">
+                                            <p className="font-bold text-slate-200 truncate">{file.name}</p>
+                                            <p className="text-xs text-slate-500">{(file.size / 1024).toFixed(1)} KB</p>
+                                        </div>
+                                        <span className="text-xs font-bold text-slate-400 bg-white/5 px-2 py-1 rounded border border-white/5">#{idx + 1}</span>
+                                        <button onClick={() => removeFile(idx)} className="text-slate-500 hover:text-red-500 transition-colors bg-white/5 p-2 rounded-lg">
+                                            <X size={16} />
+                                        </button>
+                                    </motion.div>
+                                ))}
                             </div>
-                        )}
 
-                        {status === 'processing' && (
-                            <div className="space-y-2">
-                                <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
-                                    <div
-                                        className="h-full bg-red-500 transition-all duration-300"
-                                        style={{ width: `${progress}%` }}
-                                    />
-                                </div>
-                                <p className="text-sm text-slate-500 text-center">Merging {files.length} PDFs...</p>
-                            </div>
-                        )}
+                            <button
+                                onClick={() => fileInputRef.current?.click()}
+                                className="w-full py-4 border-2 border-dashed border-white/10 rounded-xl text-slate-400 hover:border-red-500/50 hover:text-red-400 hover:bg-red-500/5 transition-all flex items-center justify-center gap-2 font-bold"
+                            >
+                                <Plus size={20} /> Add More PDFs
+                            </button>
+                            <input type="file" ref={fileInputRef} onChange={handleFiles} className="hidden" accept=".pdf" multiple />
 
-                        <div className="flex justify-center">
-                            {status === 'success' ? (
-                                <div className="flex gap-4">
-                                    <a href={mergedUrl} download="merged.pdf" className="bg-emerald-600 text-white px-10 py-4 rounded-2xl font-bold text-lg hover:bg-emerald-700 flex items-center gap-3 cursor-pointer">
-                                        <Download size={20} /> Download Merged PDF
-                                    </a>
-                                    <button onClick={() => { setStatus('idle'); setFiles([]); }} className="bg-slate-100 text-slate-600 px-10 py-4 rounded-2xl font-bold cursor-pointer">Start Over</button>
-                                </div>
-                            ) : status === 'processing' ? (
-                                <div className="flex items-center gap-3 text-slate-600">
-                                    <Loader2 size={24} className="animate-spin" />
-                                    <span className="font-bold">Merging PDFs...</span>
-                                </div>
-                            ) : (
-                                <button
-                                    onClick={merge}
-                                    disabled={files.length < 2}
-                                    className="bg-slate-900 text-white px-12 py-5 rounded-2xl font-bold text-xl hover:bg-red-600 transition-all shadow-xl disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                            {status === 'error' && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
+                                    className="flex items-center gap-3 p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-400"
                                 >
-                                    Merge {files.length} PDFs
-                                </button>
+                                    <AlertCircle size={20} />
+                                    <span className="text-sm font-medium">{error}</span>
+                                </motion.div>
                             )}
-                        </div>
-                    </div>
-                )}
+
+                            {status === 'processing' && (
+                                <div className="space-y-3 p-6 bg-white/5 rounded-2xl border border-white/10">
+                                    <div className="flex justify-between items-center text-sm font-bold text-slate-300">
+                                        <span>Merging Progress</span>
+                                        <span>{Math.round(progress)}%</span>
+                                    </div>
+                                    <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                        <motion.div
+                                            className="h-full bg-gradient-to-r from-red-600 to-rose-600"
+                                            initial={{ width: 0 }}
+                                            animate={{ width: `${progress}%` }}
+                                            transition={{ duration: 0.3 }}
+                                        />
+                                    </div>
+                                    <p className="text-sm text-slate-500 text-center animate-pulse">Merging {files.length} PDFs...</p>
+                                </div>
+                            )}
+
+                            <div className="flex justify-center">
+                                {status === 'success' ? (
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        className="flex flex-col md:flex-row gap-4 w-full"
+                                    >
+                                        <a href={mergedUrl} download="merged.pdf" className="flex-1 bg-emerald-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-emerald-500 transition-all shadow-lg flex items-center justify-center gap-2">
+                                            <Download size={20} /> Download Merged PDF
+                                        </a>
+                                        <button onClick={() => { setStatus('idle'); setFiles([]); }} className="flex-1 bg-white/5 text-slate-300 px-8 py-4 rounded-2xl font-bold hover:bg-white/10 hover:text-white transition-all border border-white/5">Start Over</button>
+                                    </motion.div>
+                                ) : status !== 'processing' && (
+                                    <button
+                                        onClick={merge}
+                                        disabled={files.length < 2}
+                                        className="w-full bg-white text-slate-900 px-12 py-5 rounded-2xl font-bold text-xl hover:bg-red-50 hover:text-red-600 transition-all shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-slate-900"
+                                    >
+                                        Merge {files.length} PDFs
+                                    </button>
+                                )}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </div>
     );
