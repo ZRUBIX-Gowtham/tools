@@ -103,14 +103,29 @@ export default function VideoEnhancer() {
 
             // Use MediaRecorder with higher bitrate for enhancement
             const stream = canvas.captureStream(30);
+
+            // Determine supported mime type
+            const mimeTypes = [
+                'video/webm;codecs=vp9',
+                'video/webm;codecs=vp8',
+                'video/webm',
+                'video/mp4'
+            ];
+
+            let selectedMimeType = mimeTypes.find(type => MediaRecorder.isTypeSupported(type)) || '';
+
+            if (!selectedMimeType) {
+                throw new Error('No supported video mime format found in this browser');
+            }
+
             const mediaRecorder = new MediaRecorder(stream, {
-                mimeType: 'video/webm;codecs=vp8',
-                videoBitsPerSecond: Math.floor(file.size * 2 * 8 / video.duration) // Higher bitrate for quality
+                mimeType: selectedMimeType,
+                videoBitsPerSecond: Math.max(5000000, Math.floor(file.size * 2 * 8 / (video.duration || 1))) // At least 5Mbps or calculated high bitrate
             });
 
             const chunks = [];
             mediaRecorder.ondataavailable = (e) => {
-                if (e.data.size > 0) {
+                if (e.data && e.data.size > 0) {
                     chunks.push(e.data);
                 }
             };

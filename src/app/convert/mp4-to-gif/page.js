@@ -67,18 +67,19 @@ export default function MP4ToGIF() {
             // Set canvas size based on video
             const maxWidth = 480;
             const scale = Math.min(1, maxWidth / video.videoWidth);
-            canvas.width = Math.floor(video.videoWidth * scale);
-            canvas.height = Math.floor(video.videoHeight * scale);
+            const w = Math.floor(video.videoWidth * scale);
+            const h = Math.floor(video.videoHeight * scale);
+            canvas.width = w;
+            canvas.height = h;
 
             const frames = [];
-            // Calculate frame count based on speed - faster speed means fewer actual frames from video but same GIF duration feel
+            // Calculate frame count based on speed
             const effectiveDuration = duration / speed;
             const frameCount = Math.floor(effectiveDuration * fps);
             const frameDelay = 1000 / fps;
 
             // Capture frames with speed consideration
             for (let i = 0; i < frameCount; i++) {
-                // With speed multiplier, we skip through video faster
                 const currentTime = startTime + (i / fps) * speed;
                 if (currentTime > videoDuration || currentTime > startTime + duration) break;
 
@@ -86,7 +87,7 @@ export default function MP4ToGIF() {
 
                 await new Promise((resolve) => {
                     video.onseeked = () => {
-                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(video, 0, 0, w, h);
                         frames.push(canvas.toDataURL('image/jpeg', quality));
                         setProgress(((i + 1) / frameCount) * 50);
                         resolve();
@@ -98,14 +99,15 @@ export default function MP4ToGIF() {
                 throw new Error('No frames captured');
             }
 
-            // Load gifshot library
-            const gifshot = await loadGifshot();
+            // Create GIF using imported gifshot
+            // We need to dynamically import because gifshot might assume window exists
+            const gifshotModule = await import('gifshot');
+            const gifshot = gifshotModule.default || gifshotModule;
 
-            // Create GIF
             gifshot.createGIF({
                 images: frames,
-                gifWidth: canvas.width,
-                gifHeight: canvas.height,
+                gifWidth: w,
+                gifHeight: h,
                 interval: frameDelay / 1000,
                 numFrames: frames.length,
                 progressCallback: (captureProgress) => {

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { QrCode, Download, Copy, Check, Settings, Palette, Layout } from 'lucide-react';
+import { QrCode, Download, Copy, Check, Palette, Layout } from 'lucide-react';
 
 const QR_TEMPLATES = [
     { name: 'Classic', fg: '#000000', bg: '#ffffff', style: 'default' },
