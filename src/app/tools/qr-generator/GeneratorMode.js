@@ -103,18 +103,23 @@ export default function GeneratorMode({ initialFgColor = '#000000', initialBgCol
     const handleLogoUrlChange = (e) => {
         const url = e.target.value;
         setLogoUrl(url);
-        setLogo(url); // Set logo immediately to the URL
+        setLogo(url || null); // Set logo immediately to the URL, clear if empty
     };
 
     const downloadQR = () => {
-        const canvas = qrRef.current.querySelector('canvas');
-        if (!canvas) return;
+        try {
+            const canvas = qrRef.current.querySelector('canvas');
+            if (!canvas) return;
 
-        const url = canvas.toDataURL('image/png');
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'qrcode.png';
-        link.click();
+            const url = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'qrcode.png';
+            link.click();
+        } catch (err) {
+            console.error('Download failed:', err);
+            alert("Failed to download QR Code. If you are using an external image URL for the logo, the browser may be blocking it for security reasons (CORS). Please try uploading the image file instead.");
+        }
     };
 
     const copyToClipboard = async () => {
@@ -517,24 +522,48 @@ export default function GeneratorMode({ initialFgColor = '#000000', initialBgCol
                                     </div>
 
                                     {/* Logo Parameter Toggle */}
-                                    {logo && !logo.startsWith('data:') && (
-                                        <div className="flex items-center justify-between p-3 bg-zinc-900/50 rounded-xl animate-in slide-in-from-top-2">
-                                            <div className="flex items-center gap-3">
-                                                <span className="text-amber-400 font-mono text-sm font-bold">logo</span>
-                                                {includeLogo ? (
-                                                    <span className="text-zinc-300 text-sm truncate max-w-[150px]">{logo}</span>
-                                                ) : (
-                                                    <span className="text-zinc-500 text-sm italic">Excluded</span>
-                                                )}
-                                            </div>
-                                            <button
-                                                onClick={() => setIncludeLogo(!includeLogo)}
-                                                className={`relative w-12 h-6 rounded-full transition-colors cursor-pointer ${includeLogo ? 'bg-amber-500' : 'bg-zinc-700'}`}
-                                                title="Toggle Parameter"
-                                            >
-                                                <div className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform ${includeLogo ? 'translate-x-6' : 'translate-x-0'}`} />
-                                            </button>
-                                        </div>
+                                    {logo && (
+                                        <>
+                                            {!logo.startsWith('data:') ? (
+                                                <div className="flex flex-col gap-2 p-3 bg-zinc-900/50 rounded-xl animate-in slide-in-from-top-2">
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex items-center gap-3">
+                                                            <span className="text-amber-400 font-mono text-sm font-bold">logo</span>
+                                                            <button
+                                                                onClick={() => setIncludeLogo(!includeLogo)}
+                                                                className={`relative w-12 h-6 rounded-full transition-colors cursor-pointer ${includeLogo ? 'bg-amber-500' : 'bg-zinc-700'}`}
+                                                                title="Toggle Parameter"
+                                                            >
+                                                                <div className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform ${includeLogo ? 'translate-x-6' : 'translate-x-0'}`} />
+                                                            </button>
+                                                        </div>
+                                                        {includeLogo ? (
+                                                            <span className="text-zinc-500 text-xs italic">Included</span>
+                                                        ) : (
+                                                            <span className="text-zinc-500 text-xs italic">Excluded</span>
+                                                        )}
+                                                    </div>
+
+                                                    {includeLogo && (
+                                                        <div className="text-xs text-zinc-400 font-mono break-all bg-black/20 p-2 rounded-lg border border-white/5">
+                                                            {logo}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ) : (
+                                                <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl flex gap-3 items-start animate-in slide-in-from-top-2">
+                                                    <div className="p-1 bg-amber-500/20 rounded-lg mt-0.5">
+                                                        <ImageIcon size={14} className="text-amber-500" />
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-xs font-bold text-amber-200 mb-0.5">Logo Not Included</p>
+                                                        <p className="text-[10px] leading-relaxed text-amber-500/80">
+                                                            Uploaded images cannot be part of the shareable URL. To include a logo in the link, please use the <b>Paste Image URL</b> option in the Logo tab instead.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </>
                                     )}
                                 </div>
                             </div>
