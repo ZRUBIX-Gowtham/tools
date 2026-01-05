@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { Type, FileText } from 'lucide-react';
+import RelatedTools from '@/components/RelatedTools';
 
 export default function WordCounter() {
     const [text, setText] = useState('');
@@ -77,6 +78,7 @@ export default function WordCounter() {
                     </button>
                 </div>
             </div>
+            <RelatedTools />
         </div>
     );
 }

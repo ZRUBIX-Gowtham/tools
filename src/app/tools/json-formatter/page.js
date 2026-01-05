@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef } from 'react';
 import { Code, Copy, Check, FileJson, Upload, Trash } from 'lucide-react';
+import RelatedTools from '@/components/RelatedTools';
 
 export default function JSONFormatter() {
     const [input, setInput] = useState('');
@@ -128,6 +129,7 @@ export default function JSONFormatter() {
                     </button>
                 </div>
             </div>
+            <RelatedTools />
         </div>
     );
 }

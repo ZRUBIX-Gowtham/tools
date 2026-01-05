@@ -1,6 +1,8 @@
 "use client";
 import { useState, useRef } from 'react';
 import { Download, Upload, Sliders, ArrowRight, X, Maximize, Crop } from 'lucide-react';
+import RelatedTools from '@/components/RelatedTools';
+import { usePathname } from 'next/navigation';
 
 export default function ImageResizer() {
     const [file, setFile] = useState(null);
@@ -13,6 +15,7 @@ export default function ImageResizer() {
     const [status, setStatus] = useState('idle');
     const [resizedUrl, setResizedUrl] = useState(null);
     const fileInputRef = useRef(null);
+    const pathname = usePathname();
 
     const handleFile = (e) => {
         const selectedFile = e.target.files[0];
@@ -199,6 +202,8 @@ export default function ImageResizer() {
                     </div>
                 )}
             </div>
+
+            <RelatedTools currentPath={pathname} />
         </div>
     );
 }

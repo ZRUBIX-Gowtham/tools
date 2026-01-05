@@ -1,6 +1,8 @@
 "use client";
 import { useState, useRef } from 'react';
 import { Download, Upload, Sliders, ArrowRight } from 'lucide-react';
+import RelatedTools from '@/components/RelatedTools';
+import { usePathname } from 'next/navigation';
 
 export default function ImageCompressor() {
     const [file, setFile] = useState(null);
@@ -11,6 +13,7 @@ export default function ImageCompressor() {
     const [status, setStatus] = useState('idle');
     const [compressedUrl, setCompressedUrl] = useState(null);
     const fileInputRef = useRef(null);
+    const pathname = usePathname();
 
     const handleFile = (e) => {
         const selectedFile = e.target.files[0];
@@ -169,6 +172,8 @@ export default function ImageCompressor() {
                     </div>
                 )}
             </div>
+
+            <RelatedTools currentPath={pathname} />
         </div>
     );
 }

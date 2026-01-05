@@ -47,6 +47,9 @@ export default function Footer() {
                 { name: 'SVG to JPG', href: '/convert/svg-to-jpg' },
                 { name: 'SVG to PDF', href: '/convert/svg-to-pdf' },
                 { name: 'Any to SVG', href: '/convert/any-to-svg' },
+                { name: 'SVG Viewer', href: '/tools/svg-viewer' },
+                { name: 'SVG Color Changer', href: '/tools/svg-color-changer' },
+                { name: 'Text to SVG', href: '/tools/text-to-svg' },
             ]
         },
         {
@@ -74,8 +77,6 @@ export default function Footer() {
             links: [
                 { name: 'PDF Compressor', href: '/tools/pdf-compressor' },
                 { name: 'PDF Merger', href: '/tools/pdf-merger' },
-                { name: 'PDF to JPG', href: '/convert/pdf-to-jpg' },
-                { name: 'PDF to PNG', href: '/convert/pdf-to-png' },
             ]
         },
         {

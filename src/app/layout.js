@@ -14,6 +14,9 @@ export const metadata = {
   verification: {
     google: "ekF41RRcAPx_GVF-ocm_CnCLnC36RxqC2TUtcr-E-Cw",
   },
+  other: {
+    "google-adsense-account": "ca-pub-1282068947061740",
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -22,7 +25,7 @@ export default function RootLayout({ children }) {
       <body className={ubuntu.className}>
         <div className="flex flex-col min-h-screen">
           <Header />
-          <main className="flex-grow pt-16">
+          <main className="flex-grow pt-20">
             {children}
           </main>
           <Footer />

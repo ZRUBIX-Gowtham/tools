@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Video, Download, X, Loader2, AlertCircle, Sparkles, Upload, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
+import RelatedTools from '@/components/RelatedTools';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function VideoEnhancer() {
@@ -481,6 +482,7 @@ export default function VideoEnhancer() {
                     <p className="text-slate-500 leading-relaxed font-light">All processing happens locally. Your videos never leave your device.</p>
                 </div>
             </div>
+            <RelatedTools />
         </div>
     );
 }

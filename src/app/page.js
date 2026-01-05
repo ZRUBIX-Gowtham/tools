@@ -21,6 +21,15 @@ import {
 
 const converterGroups = [
   {
+    title: "Editing Tools",
+    icon: <Sparkles size={24} />,
+    gradient: "from-blue-600/30 to-indigo-600/5",
+    isNew: true,
+    tools: [
+      { name: "Canvas Studio", href: "/editing/canvas-studio", description: "Design stunning canvases and professional layouts", isNew: true },
+    ]
+  },
+  {
     title: "PNG Tools",
     icon: <ImageIcon size={24} />,
     gradient: "from-blue-500/20 to-blue-500/5",
@@ -60,7 +69,10 @@ const converterGroups = [
       { name: "SVG to PNG", href: "/convert/svg-to-png", description: "Vector to high-res raster image" },
       { name: "SVG to JPG", href: "/convert/svg-to-jpg", description: "Vector illustration to photo format" },
       { name: "SVG to PDF", href: "/convert/svg-to-pdf", description: "Convert SVG to PDF document" },
-      { name: "Any to SVG", href: "/convert/any-to-svg", description: "Vectorize any image instantly" }
+      { name: "Any to SVG (Path)", href: "/convert/any-to-svg", description: "Vectorize any image instantly" },
+      { name: "SVG Viewer", href: "/tools/svg-viewer", description: "View and inspect SVG code", isNew: true },
+      { name: "SVG Color Changer", href: "/tools/svg-color-changer", description: "Recolor SVG icons easily", isNew: true },
+      { name: "Text to SVG", href: "/tools/text-to-svg", description: "Create customizable SVG text", isNew: true }
     ]
   },
   {
@@ -80,8 +92,6 @@ const converterGroups = [
     gradient: "from-red-500/20 to-red-500/5",
     isNew: true,
     tools: [
-      { name: "PDF to PNG", href: "/convert/pdf-to-png", description: "Extract images from PDF files", isNew: true },
-      { name: "PDF to JPG", href: "/convert/pdf-to-jpg", description: "Convert PDF pages to JPG images", isNew: true },
       { name: "PDF Compressor", href: "/tools/pdf-compressor", description: "Reduce PDF file size", isNew: true },
       { name: "PDF Merger", href: "/tools/pdf-merger", description: "Combine multiple PDFs into one", isNew: true }
     ]
@@ -142,7 +152,8 @@ const converterGroups = [
     tools: [
       { name: "QR Code Generator", href: "/tools/qr-generator", description: "Create QR codes instantly", isNew: true },
       { name: "QR Code Reader", href: "/tools/qr-reader", description: "Scan and read QR codes", isNew: true },
-      { name: "Barcode Generator", href: "/tools/barcode-generator", description: "Generate various barcodes", isNew: true }
+      { name: "Barcode Generator", href: "/tools/barcode-generator", description: "Generate various barcodes", isNew: true },
+      { name: "Barcode Reader", href: "/tools/barcode-reader", description: "Scan and decode barcodes", isNew: true }
     ]
   },
   {
@@ -165,7 +176,7 @@ export default function Home() {
     <div className="min-h-screen selection:bg-blue-500/30 selection:text-white">
 
       {/* Hero Section */}
-      <section className="relative pt-30 pb-20 overflow-hidden bg-black">
+      <section className="relative pt-32 pb-20 overflow-hidden bg-black">
         {/* Subtle Backdrop - No more muddy blur */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-black to-black opacity-50" />
 
@@ -180,7 +191,7 @@ export default function Home() {
               <span className="text-xs font-bold text-blue-200 tracking-widest uppercase">Premium Tools Free Forever</span>
             </div>
 
-            <h1 className="text-6xl md:text-8xl font-black text-white mb-8 tracking-tighter leading-[0.9]">
+            <h1 className="text-4xl md:text-6xl lg:text-8xl font-black text-white mb-8 tracking-tighter leading-[0.95]">
               MASTER YOUR <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
                 DIGITAL ASSETS

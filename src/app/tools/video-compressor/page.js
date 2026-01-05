@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef } from 'react';
 import { Video, Download, X, Loader2, AlertCircle, Settings, Upload, CheckCircle2 } from 'lucide-react';
+import RelatedTools from '@/components/RelatedTools';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function VideoCompressor() {
@@ -188,7 +189,7 @@ export default function VideoCompressor() {
                             <div>
                                 <button
                                     onClick={() => fileInputRef.current?.click()}
-                                    className="bg-rose-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-rose-500 transition-all shadow-lg hover:shadow-rose-600/20 active:scale-95 mb-4"
+                                    className="bg-rose-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-rose-500 transition-all shadow-lg hover:shadow-rose-600/20 active:scale-95 mb-4 cursor-pointer"
                                 >
                                     Choose Video File
                                 </button>
@@ -215,7 +216,7 @@ export default function VideoCompressor() {
                                         <p className="text-xs text-slate-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
                                     </div>
                                 </div>
-                                <button onClick={reset} className="text-slate-500 hover:text-rose-500 transition-colors bg-white/5 p-2 rounded-lg">
+                                <button onClick={reset} className="text-slate-500 hover:text-rose-500 transition-colors bg-white/5 p-2 rounded-lg cursor-pointer">
                                     <X size={16} />
                                 </button>
                             </div>
@@ -272,7 +273,7 @@ export default function VideoCompressor() {
                             ) : (
                                 <button
                                     onClick={compress}
-                                    className="bg-white text-slate-900 px-10 py-4 rounded-2xl font-bold text-lg hover:bg-rose-50 hover:text-rose-600 transition-all shadow-xl active:scale-95 flex items-center gap-3 mx-auto"
+                                    className="bg-white text-slate-900 px-10 py-4 rounded-2xl font-bold text-lg hover:bg-rose-50 hover:text-rose-600 transition-all shadow-xl active:scale-95 flex items-center gap-3 mx-auto cursor-pointer"
                                 >
                                     Compress Video
                                 </button>
@@ -301,13 +302,13 @@ export default function VideoCompressor() {
                                 <a
                                     href={compressedUrl}
                                     download={`compressed-${file.name.replace(/\.[^/.]+$/, '')}.webm`}
-                                    className="bg-emerald-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-emerald-500 transition-all shadow-lg flex items-center gap-2"
+                                    className="bg-emerald-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-emerald-500 transition-all shadow-lg flex items-center gap-2 cursor-pointer"
                                 >
                                     <Download size={20} /> Download
                                 </a>
                                 <button
                                     onClick={reset}
-                                    className="bg-white/5 text-slate-300 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-white/10 hover:text-white transition-all border border-white/5"
+                                    className="bg-white/5 text-slate-300 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-white/10 hover:text-white transition-all border border-white/5 cursor-pointer"
                                 >
                                     Compress Another
                                 </button>
@@ -340,6 +341,7 @@ export default function VideoCompressor() {
                     <p className="text-slate-500 leading-relaxed font-light">Harness your computer&apos;s power for quick processing without server uploads.</p>
                 </div>
             </div>
+            <RelatedTools />
         </div>
     );
 }

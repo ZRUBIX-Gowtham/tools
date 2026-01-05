@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef } from 'react';
 import { Download, Upload, FileText, Plus, X, ArrowRight, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
+import RelatedTools from '@/components/RelatedTools';
 import { PDFDocument } from 'pdf-lib';
 
 export default function PdfMerger() {
@@ -93,7 +94,7 @@ export default function PdfMerger() {
 
                             <button
                                 onClick={() => fileInputRef.current?.click()}
-                                className="flex items-center gap-2 text-sm font-bold text-red-500 hover:text-red-400"
+                                className="flex items-center gap-2 text-sm font-bold text-red-500 hover:text-red-400 cursor-pointer"
                             >
                                 <Plus size={16} /> Add More Files
                             </button>
@@ -135,8 +136,9 @@ export default function PdfMerger() {
                     </div>
                 )}
             </div>
+            <RelatedTools />
         </div>
     );
 }
 
-import { CheckCircle2 as CheckCircleIcon } from 'lucide-react';
+

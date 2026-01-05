@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { diffWords, diffLines, diffChars } from 'diff';
 import { Copy, Trash2, ArrowRightLeft, FileText, Type, AlignJustify, Check, Upload } from 'lucide-react';
+import RelatedTools from '@/components/RelatedTools';
 
 const DiffChecker = () => {
     const [originalText, setOriginalText] = useState('');
@@ -16,6 +17,7 @@ const DiffChecker = () => {
 
     useEffect(() => {
         handleCompare();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [originalText, modifiedText, diffMode]);
 
     const handleCompare = () => {
@@ -256,6 +258,8 @@ const DiffChecker = () => {
                     </div>
                 )}
             </div>
+
+            <RelatedTools />
 
             <style jsx global>{`
         @keyframes blob {

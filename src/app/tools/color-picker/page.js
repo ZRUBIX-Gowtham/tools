@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef } from 'react';
 import { Pipette, Copy, Check } from 'lucide-react';
+import RelatedTools from '@/components/RelatedTools';
 
 export default function ColorPicker() {
     const [color, setColor] = useState('#3B82F6');
@@ -167,6 +168,7 @@ export default function ColorPicker() {
                     )}
                 </div>
             </div>
+            <RelatedTools />
         </div>
     );
 }

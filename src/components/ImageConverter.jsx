@@ -2,6 +2,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { Upload, File, CheckCircle2, AlertCircle, Download, ArrowRight, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePathname } from 'next/navigation';
+import RelatedTools from './RelatedTools';
 import confetti from 'canvas-confetti';
 
 import jsPDF from 'jspdf';
@@ -12,8 +14,9 @@ import JSZip from 'jszip';
 // Helper to load PDF.js dynamically
 const loadPdfJs = async () => {
     const pdfjsLib = await import('pdfjs-dist');
-    if (typeof window !== 'undefined' && !pdfjsLib.GlobalWorkerOptions.workerSrc) {
-        pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+    if (typeof window !== 'undefined') {
+        // Force local worker to avoid CDN fetch issues
+        pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
     }
     return pdfjsLib;
 };
@@ -25,6 +28,7 @@ export default function ImageConverter({ fromFormat, toFormat, title, descriptio
     const [progress, setProgress] = useState(0);
     const [error, setError] = useState(null);
     const fileInputRef = useRef(null);
+    const pathname = usePathname();
 
     const allowedTypes = {
         'PNG': ['image/png'],
@@ -280,7 +284,7 @@ export default function ImageConverter({ fromFormat, toFormat, title, descriptio
                             <div>
                                 <button
                                     onClick={() => fileInputRef.current?.click()}
-                                    className="bg-blue-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-blue-500 transition-all shadow-lg hover:shadow-blue-600/20 active:scale-95 mb-4"
+                                    className="bg-blue-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-blue-500 transition-all shadow-lg hover:shadow-blue-600/20 active:scale-95 mb-4 cursor-pointer"
                                 >
                                     Choose {fromFormat === 'ANY' ? 'Files' : fromFormat} Files
                                 </button>
@@ -310,7 +314,7 @@ export default function ImageConverter({ fromFormat, toFormat, title, descriptio
                                                 <p className="text-xs text-slate-500">{(file.size / 1024).toFixed(1)} KB</p>
                                             </div>
                                         </div>
-                                        <button onClick={() => removeFile(idx)} className="text-slate-500 hover:text-rose-500 transition-colors bg-white/5 p-2 rounded-lg">
+                                        <button onClick={() => removeFile(idx)} className="text-slate-500 hover:text-rose-500 transition-colors bg-white/5 p-2 rounded-lg cursor-pointer">
                                             <X size={16} />
                                         </button>
                                     </div>
@@ -320,7 +324,7 @@ export default function ImageConverter({ fromFormat, toFormat, title, descriptio
                             {/* Add More Button */}
                             <button
                                 onClick={() => fileInputRef.current?.click()}
-                                className="text-sm font-bold text-blue-400 hover:text-blue-300"
+                                className="text-sm font-bold text-blue-400 hover:text-blue-300 cursor-pointer"
                             >
                                 + Add More Files
                             </button>
@@ -339,7 +343,7 @@ export default function ImageConverter({ fromFormat, toFormat, title, descriptio
                             ) : (
                                 <button
                                     onClick={convertImages}
-                                    className="bg-white text-slate-900 px-10 py-4 rounded-2xl font-bold text-lg hover:bg-blue-50 hover:text-blue-600 transition-all shadow-xl active:scale-95 flex items-center gap-3 mx-auto"
+                                    className="bg-white text-slate-900 px-10 py-4 rounded-2xl font-bold text-lg hover:bg-blue-50 hover:text-blue-600 transition-all shadow-xl active:scale-95 flex items-center gap-3 mx-auto cursor-pointer"
                                 >
                                     Convert All to {toFormat} <ArrowRight size={20} />
                                 </button>
@@ -368,7 +372,7 @@ export default function ImageConverter({ fromFormat, toFormat, title, descriptio
                                         <a
                                             href={file.url}
                                             download={`converted-${idx}.${file.format}`}
-                                            className="text-xs bg-emerald-500 text-white px-3 py-1.5 rounded-lg hover:bg-emerald-400 transition-colors flex items-center gap-1"
+                                            className="text-xs bg-emerald-500 text-white px-3 py-1.5 rounded-lg hover:bg-emerald-400 transition-colors flex items-center gap-1 cursor-pointer"
                                         >
                                             <Download size={12} /> Save
                                         </a>
@@ -380,14 +384,14 @@ export default function ImageConverter({ fromFormat, toFormat, title, descriptio
                                 {convertedFiles.length > 2 && (
                                     <button
                                         onClick={downloadAllAsZip}
-                                        className="bg-blue-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-blue-500 transition-all shadow-lg hover:shadow-blue-600/20 active:scale-95 flex items-center gap-2"
+                                        className="bg-blue-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-blue-500 transition-all shadow-lg hover:shadow-blue-600/20 active:scale-95 flex items-center gap-2 cursor-pointer"
                                     >
                                         <Download size={20} /> Download All (ZIP)
                                     </button>
                                 )}
                                 <button
                                     onClick={reset}
-                                    className="bg-white/5 text-slate-300 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-white/10 hover:text-white transition-all border border-white/5"
+                                    className="bg-white/5 text-slate-300 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-white/10 hover:text-white transition-all border border-white/5 cursor-pointer"
                                 >
                                     Convert More
                                 </button>
@@ -410,7 +414,7 @@ export default function ImageConverter({ fromFormat, toFormat, title, descriptio
                             </div>
                             <button
                                 onClick={reset}
-                                className="bg-white/10 text-white px-8 py-3 rounded-xl font-bold hover:bg-white/20 transition-all"
+                                className="bg-white/10 text-white px-8 py-3 rounded-xl font-bold hover:bg-white/20 transition-all cursor-pointer"
                             >
                                 Try Again
                             </button>
@@ -443,6 +447,8 @@ export default function ImageConverter({ fromFormat, toFormat, title, descriptio
                     <p className="text-slate-500 leading-relaxed font-light">Harness your computer's power for near-instant processing without server lag.</p>
                 </div>
             </div>
+
+            <RelatedTools currentPath={pathname} />
         </div>
     );
 }

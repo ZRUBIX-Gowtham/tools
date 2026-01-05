@@ -1,6 +1,7 @@
 "use client";
 import { useState } from 'react';
 import { ArrowRightLeft, Copy, Check } from 'lucide-react';
+import RelatedTools from '@/components/RelatedTools';
 
 export default function ColorConverter() {
     const [hex, setHex] = useState('#3B82F6');
@@ -109,6 +110,7 @@ export default function ColorConverter() {
                     ))}
                 </div>
             </div>
+            <RelatedTools />
         </div>
     );
 }

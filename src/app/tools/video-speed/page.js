@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef } from 'react';
 import { Video, Download, X, Loader2, AlertCircle, Zap, FastForward, Gauge } from 'lucide-react';
+import RelatedTools from '@/components/RelatedTools';
 
 export default function VideoSpeedChanger() {
     const [file, setFile] = useState(null);
@@ -248,6 +249,7 @@ export default function VideoSpeedChanger() {
                     </div>
                 )}
             </div>
+            <RelatedTools />
         </div>
     );
 }

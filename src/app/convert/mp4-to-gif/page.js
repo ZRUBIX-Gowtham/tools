@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from 'react';
 import { Video, Download, X, Loader2, AlertCircle, Play, Pause, Clock, Scissors, Zap } from 'lucide-react';
+import RelatedTools from '@/components/RelatedTools';
 
 export default function MP4ToGIF() {
     const [file, setFile] = useState(null);
@@ -314,6 +315,7 @@ export default function MP4ToGIF() {
                     </div>
                 )}
             </div>
+            <RelatedTools />
         </div>
     );
 }

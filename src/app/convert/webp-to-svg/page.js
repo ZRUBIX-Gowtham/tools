@@ -1,4 +1,4 @@
-import ImageConverter from '@/components/ImageConverter';
+import VectorConverter from '@/components/VectorConverter';
 
 export const metadata = {
     title: "Free WebP to SVG Converter | ToolsHub",
@@ -7,11 +7,6 @@ export const metadata = {
 
 export default function WebpToSvg() {
     return (
-        <ImageConverter
-            fromFormat="WEBP"
-            toFormat="SVG"
-            title="WebP to SVG Converter"
-            description="Convert your WebP images to scalable SVG vectors. Perfect for creating scalable graphics from raster images."
-        />
+        <VectorConverter />
     );
 }

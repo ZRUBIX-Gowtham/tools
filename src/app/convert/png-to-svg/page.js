@@ -1,4 +1,4 @@
-import ImageConverter from '@/components/ImageConverter';
+import VectorConverter from '@/components/VectorConverter';
 
 export const metadata = {
     title: "Free PNG to SVG Converter | ToolsHub",
@@ -7,11 +7,6 @@ export const metadata = {
 
 export default function PngToSvg() {
     return (
-        <ImageConverter
-            fromFormat="PNG"
-            toFormat="SVG"
-            title="PNG to SVG Converter"
-            description="Convert your PNG images to scalable vector graphics. Perfect for logos and illustrations that need to scale without losing quality."
-        />
+        <VectorConverter />
     );
 }

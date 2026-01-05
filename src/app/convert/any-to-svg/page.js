@@ -1,4 +1,4 @@
-import ImageConverter from '@/components/ImageConverter';
+import VectorConverter from '@/components/VectorConverter';
 
 export const metadata = {
     title: "Free Any Image to SVG Converter | ToolsHub",
@@ -7,11 +7,6 @@ export const metadata = {
 
 export default function AnyToSvg() {
     return (
-        <ImageConverter
-            fromFormat="ANY"
-            toFormat="SVG"
-            title="Any Image to SVG Converter"
-            description="Turn your photos and logos into scalable vector graphics (SVG). Upload any common image format and we'll handle the vectorization."
-        />
+        <VectorConverter />
     );
 }

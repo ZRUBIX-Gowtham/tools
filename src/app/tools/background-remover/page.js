@@ -59,9 +59,9 @@ export default function BackgroundRemover() {
                             <div className="bg-zinc-800/50 rounded-xl p-4 border border-white/10 flex items-center justify-center min-h-[300px] relative">
                                 {status === 'success' ? (
                                     <div className="text-center text-zinc-400">
-                                        {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <div className="relative">
                                             <div className="absolute inset-0 grid-background opacity-20" />
+                                            {/* eslint-disable-next-line @next/next/no-img-element */}
                                             <img src={preview} alt="Processed" className="max-w-full max-h-[400px] rounded-lg relative z-10" />
                                             <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-lg">
                                                 <p className="text-white font-bold">Demo Mode Only</p>
