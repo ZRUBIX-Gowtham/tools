@@ -205,6 +205,13 @@ function CanvasStudioContent() {
         });
     };
 
+    const deleteBox = useCallback((id) => {
+        const newData = { ...canvasData, boxes: canvasData.boxes.filter(box => box.id !== id) };
+        setCanvasData(newData);
+        saveToHistory(newData);
+        setSelectedBoxId(null);
+    }, [canvasData, saveToHistory]);
+
     // Keyboard Shortcuts
     useEffect(() => {
         const handleKeyDown = (e) => {
@@ -242,26 +249,14 @@ function CanvasStudioContent() {
                     setMultiSelectedIds([]);
                     setSelectedBoxId(null);
                 } else if (selectedBoxId) {
-                    const newData = { ...canvasData, boxes: canvasData.boxes.filter(box => box.id !== selectedBoxId) };
-                    setCanvasData(newData);
-                    saveToHistory(newData);
-                    setSelectedBoxId(null);
+                    deleteBox(selectedBoxId);
                 }
             }
         };
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [selectedBoxId, multiSelectedIds, canvasData, clipboard, undo, redo, saveToHistory]);
-
-    const deleteBox = (id) => {
-        setCanvasData(prev => {
-            const newData = { ...prev, boxes: prev.boxes.filter(box => box.id !== id) };
-            saveToHistory(newData);
-            return newData;
-        });
-        setSelectedBoxId(null);
-    };
+    }, [selectedBoxId, multiSelectedIds, canvasData, clipboard, undo, redo, saveToHistory, deleteBox]);
 
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
