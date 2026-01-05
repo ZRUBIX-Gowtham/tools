@@ -259,12 +259,12 @@ function CanvasStudioContent() {
         }
     };
 
-    const deleteBox = (id) => {
+    const deleteBox = useCallback((id) => {
         const newData = { ...canvasData, boxes: canvasData.boxes.filter(box => box.id !== id) };
         setCanvasData(newData);
         saveToHistory(newData);
         setSelectedBoxId(null);
-    };
+    }, [canvasData, saveToHistory]);
 
     const addNewBox = (type, shapeType = 'rect', initialMeta = {}) => {
         const id = `${type}-${Date.now()}`;

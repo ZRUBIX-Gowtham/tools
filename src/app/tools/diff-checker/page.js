@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { diffWords, diffLines, diffChars } from 'diff';
 import { Copy, Trash2, ArrowRightLeft, FileText, Type, AlignJustify, Check, Upload } from 'lucide-react';
 import RelatedTools from '@/components/RelatedTools';
@@ -15,12 +15,7 @@ const DiffChecker = () => {
     const originalFileRef = useRef(null);
     const modifiedFileRef = useRef(null);
 
-    useEffect(() => {
-        handleCompare();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [originalText, modifiedText, diffMode]);
-
-    const handleCompare = () => {
+    const handleCompare = useCallback(() => {
         let diff;
         if (diffMode === 'chars') {
             diff = diffChars(originalText, modifiedText);
@@ -30,7 +25,11 @@ const DiffChecker = () => {
             diff = diffWords(originalText, modifiedText);
         }
         setDiffResult(diff);
-    };
+    }, [originalText, modifiedText, diffMode]);
+
+    useEffect(() => {
+        handleCompare();
+    }, [handleCompare]);
 
     const handleCopy = () => {
         navigator.clipboard.writeText(modifiedText);

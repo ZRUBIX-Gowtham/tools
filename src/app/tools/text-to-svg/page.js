@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Download, Settings, Copy, Sparkles } from 'lucide-react';
 import RelatedTools from '@/components/RelatedTools';
 
@@ -46,13 +46,7 @@ export default function TextToSvg() {
         });
     }, [text]);
 
-    // Generate SVG Content
-    useEffect(() => {
-        generateSvg();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [text, fontFamily, fontSize, letterSpacing, universalColor, singleColor, charColors]);
-
-    const generateSvg = () => {
+    const generateSvg = useCallback(() => {
         const width = 500;
         const height = 500;
 
@@ -72,7 +66,12 @@ export default function TextToSvg() {
 </svg>`;
 
         setPreviewContent(svg);
-    };
+    }, [text, fontFamily, fontSize, letterSpacing, universalColor, singleColor, charColors]);
+
+    // Generate SVG Content
+    useEffect(() => {
+        generateSvg();
+    }, [generateSvg]);
 
     const updateCharColor = (index, color) => {
         const newColors = [...charColors];
