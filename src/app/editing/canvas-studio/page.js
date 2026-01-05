@@ -242,14 +242,26 @@ function CanvasStudioContent() {
                     setMultiSelectedIds([]);
                     setSelectedBoxId(null);
                 } else if (selectedBoxId) {
-                    deleteBox(selectedBoxId);
+                    const newData = { ...canvasData, boxes: canvasData.boxes.filter(box => box.id !== selectedBoxId) };
+                    setCanvasData(newData);
+                    saveToHistory(newData);
+                    setSelectedBoxId(null);
                 }
             }
         };
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [selectedBoxId, multiSelectedIds, canvasData, clipboard, undo, redo, saveToHistory, deleteBox]);
+    }, [selectedBoxId, multiSelectedIds, canvasData, clipboard, undo, redo, saveToHistory]);
+
+    const deleteBox = (id) => {
+        setCanvasData(prev => {
+            const newData = { ...prev, boxes: prev.boxes.filter(box => box.id !== id) };
+            saveToHistory(newData);
+            return newData;
+        });
+        setSelectedBoxId(null);
+    };
 
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
@@ -258,13 +270,6 @@ function CanvasStudioContent() {
             handleBoxUpdate(selectedBoxId, { content: url });
         }
     };
-
-    const deleteBox = useCallback((id) => {
-        const newData = { ...canvasData, boxes: canvasData.boxes.filter(box => box.id !== id) };
-        setCanvasData(newData);
-        saveToHistory(newData);
-        setSelectedBoxId(null);
-    }, [canvasData, saveToHistory]);
 
     const addNewBox = (type, shapeType = 'rect', initialMeta = {}) => {
         const id = `${type}-${Date.now()}`;
