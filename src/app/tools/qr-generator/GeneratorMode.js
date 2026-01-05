@@ -355,7 +355,7 @@ export default function GeneratorMode({ initialFgColor = '#000000', initialBgCol
                         )}
 
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-zinc-300">Resolution: {size}px</label>
+                            <label className="text-sm font-bold text-zinc-300">Resolution : {size}px</label>
                             <input
                                 type="range"
                                 min="128"
