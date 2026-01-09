@@ -24,12 +24,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1282068947061740"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1282068947061740"
+          crossorigin="anonymous">
+        </script>
       </head>
       <body className={ubuntu.className}>
         <div className="flex flex-col min-h-screen">
